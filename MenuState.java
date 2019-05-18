@@ -48,6 +48,7 @@ private Font font;
     private void select() {
         if(currentChoice == 0 ){
             //start
+            gsm.setGameState(GameStateManager.LEVEL1STATE);
         }
         if(currentChoice == 1 ){
             //Help
