@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class MenuState extends GameState {
-    private Background bg;
+    private BackgroundElement bg;
     //to keep track of the selected option
     private int currentChoice = 0 ;
     private String[] options= {
@@ -93,7 +93,7 @@ private Font font;
         this.gsm = gsm;
     try {
 
-        bg = new Background("/Resources/Background/menubg.gif",1);
+        bg = new BackgroundElement("/Resources/Background/menubg.gif", 1);
         //moves to the left
         bg.setVector(-0.1,0);
         titleColor = new Color(128,0,0);

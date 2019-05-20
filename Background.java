@@ -2,93 +2,96 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+
 public class Background {
-    private BufferedImage image;
 
-    private double x;
-    private double y;
-    private double dx;
-    private double dy;
+    private BackgroundElement sky;
+    private BackgroundElement mountain1;
+    private BackgroundElement mountain2;
+    private BackgroundElement tree;
+    private BackgroundElement bush;
+    private BackgroundElement rails;
 
-    public Background(String s, double ms) {
+
+    public Background() {
+
         try {
-            //importing resources
-            image = ImageIO.read(
-                    getClass().getResourceAsStream(s)
-            );
+
+            sky = new BackgroundElement("/Resources/Background/bg.png", 1);
+            sky.setVector(-0.05, 0);
+            mountain1 = new BackgroundElement("/Resources/Background/mnt1.png", 1);
+            mountain1.setVector(-0.1, 0);
+            mountain2 = new BackgroundElement("/Resources/Background/mnt2.png", 1);
+            mountain2.setVector(-0.1, 0);
+            tree = new BackgroundElement("/Resources/Background/tree.png", 1);
+            bush = new BackgroundElement("/Resources/Background/effect.png", 1);
+            tree.setVector(-0.1, 0);
+            tree.setPosition(0, GamePanel.HEIGHT + 81);
+            bush.setPosition(0, GamePanel.HEIGHT + 83);
+
+                //importing resources
+                BufferedImage image = ImageIO.read(
+                        getClass().getResourceAsStream("/Resources/Background/Train.png")
+                );
+
+                BufferedImage im = image.getSubimage(0,
+                        925,
+                        288,
+                        100
+                );
+
+            rails = new BackgroundElement(im);
+                rails.setPosition(230,183);
+                rails.setVector(-2,0);
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public Background(BufferedImage image) {
-        this.image = image;
-    }
-
-    public void setPosition(double x, double y) {
-
-        this.x = x % GamePanel.WIDTH;
-        this.y = y % GamePanel.HEIGHT;
-    }
-
-
-    public void setVector(double dx, double dy) {
-        this.dx = dx;
-        this.dy = dy;
-    }
-
-    public void update() {
-        x += dx;
-        y += dy;
-        if(x< -GamePanel.WIDTH) {
-            x=0;
-        }
-
-    }
-    //adds more control on the dimensions of the draw
-
-    public void drawSpecific(Graphics2D g, int width , int height ) {
-
-        //draw the background
-        g.drawImage(image, (int) x, (int) y,  width , height, null);
-        //keep redrawing new image if moves away
-        if ( x < 0) {
-            g.drawImage(image, (int) x + GamePanel.WIDTH,(int) y,
-                   width , height , null);
-            System.out.println(x );
-
-        }
-        if ((int) x > 0) {
-            g.drawImage(image, (int) x - GamePanel.WIDTH,
-                     (int) y,  width , height , null);
         }
 
     }
 
     public void draw(Graphics2D g) {
-        //draw the background
-        g.drawImage(image, (int) x, (int) y, null);
 
-        g.fillRect( (int)x,(int)x,(int)x,(int) x);
-        //keep redrawing new image if moves away
-        if (x  < 0) {
-            g.drawImage(
-                    image,
-                    (int) x + GamePanel.WIDTH,
-                    (int) y,
-                    null
-            );
-        }
-        if (x > 0) {
-            g.drawImage(
-                    image,
-                    (int) x - GamePanel.WIDTH,
-                    (int) y,
-                    null
-            );
-        }
+        sky.drawSpecific(g,GamePanel.WIDTH+25,GamePanel.HEIGHT);
+        mountain1.drawSpecific(g,GamePanel.WIDTH+25,GamePanel.HEIGHT);
+        mountain2.drawSpecific(g,GamePanel.WIDTH+25,GamePanel.HEIGHT);
+        rails.drawSpecific(g,GamePanel.WIDTH,25);
+        bush.draw(g);tree.draw(g);
+    }
+
+    public void update() {
+
+        sky.update();
+        mountain1.update();
+        mountain2.update();
+        tree.update();
+        rails.update();
 
     }
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

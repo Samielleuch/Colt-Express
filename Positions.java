@@ -25,7 +25,7 @@ public enum Positions {
         return this.action;
     }
 
-    private Positions(int action) {
+    Positions(int action) {
         this.action = action;
     }
 }

@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Bandit {
+
     private BufferedImage tileSet ;
     private BufferedImage character ;
     private float xposition ;

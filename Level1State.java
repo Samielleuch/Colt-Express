@@ -1,15 +1,16 @@
 
 
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Level1State extends GameState {
 
-    private TileMap tileMap;
+    private Background background;
     private Train train;
     private Bandit player1 ;
     private  Positions p;
-
+    private JButton btn = new JButton("press me ");
 
     public Level1State(GameStateManager gsm) {
         this.gsm = gsm;
@@ -17,16 +18,16 @@ public class Level1State extends GameState {
     }
 
     public void init() {
-        tileMap = new TileMap();
+        background = new Background();
         train = new Train(230,160,"/Resources/Background/Train.png");
-        player1 = new Bandit(p.POSITION_TOP_1X.getAction() ,p.POSITION_TOP_1Y.getAction(),"/Resources/Background/char.png");
+        player1 = new Bandit(Positions.POSITION_TOP_1X.getAction(), Positions.POSITION_TOP_1Y.getAction(), "/Resources/Background/char.png");
 
-        tileMap=new TileMap();
+        background = new Background();
     }
 
 
     public void update() {
-        tileMap.update();
+        background.update();
         player1.update();
 
     }
@@ -39,7 +40,7 @@ public class Level1State extends GameState {
 
         // draw background
 
-        tileMap.draw(g);
+        background.draw(g);
 
         // draw train
         train.draw(g);
