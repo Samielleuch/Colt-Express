@@ -6,6 +6,7 @@ import java.awt.*;
 public class Level1State extends GameState {
 
     private TileMap tileMap;
+    private Train train ;
 
     public Level1State(GameStateManager gsm) {
         this.gsm = gsm;
@@ -14,6 +15,7 @@ public class Level1State extends GameState {
 
     public void init() {
         tileMap = new TileMap();
+        train = new Train(230,160,"/Resources/Background/Train.png");
         tileMap.loadTiles("/Resources/Background/Train.png");
     }
 
@@ -28,8 +30,8 @@ public class Level1State extends GameState {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 
-        // draw tilemap
-        tileMap.draw(g);
+        // draw train
+        train.draw(g);
 
     }
 
