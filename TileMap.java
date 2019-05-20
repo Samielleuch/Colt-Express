@@ -1,39 +1,17 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 
 public class TileMap {
 
-    // position
-    private double x;
-    private double y;
-
-    private int width;
-    private int height;
-
-    // tileset
-    private BufferedImage tileset;
+    private Background bg;
 
 
-    private BufferedImage train ;
-
-
-    public void loadTiles(String s) {
+    public  TileMap() {
 
         try {
 
-            tileset = ImageIO.read(
-                    getClass().getResourceAsStream(s)
-            );
-
-            train = tileset.getSubimage(
-                        16,
-                        27,
-                        259,
-                        130
-                );
-
+            bg = new Background("/Resources/Background/menubg.gif", 1);
+            bg.setVector(-0.1, 0);
 
 
         } catch (Exception e) {
@@ -44,38 +22,17 @@ public class TileMap {
 
     public void draw(Graphics2D g) {
 
-        g.drawImage(
-                train,
-                230,
-                160,
-                64, 32
-              ,
-                null
-        );
+        bg.draw(g);
 
     }
 
+    public void update() {
 
-    public int getx() {
-        return (int) x;
+        bg.update();
+
     }
 
-    public int gety() {
-        return (int) y;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-
-
-
-        }
+}
 
 
 

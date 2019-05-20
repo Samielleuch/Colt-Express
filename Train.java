@@ -36,7 +36,7 @@ public class Train {
         this.yhead = yhead;
 
         xwagons[0] = xhead - 64 ;
-        ywagons[0] = yhead;
+        ywagons[0] = yhead + 4 ;
 
         for(int i = 1 ; i<3 ; i++ ){
             xwagons[i] = xwagons[i-1]-64 ;
