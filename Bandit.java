@@ -30,6 +30,7 @@ public class Bandit {
     }
 
     public void update() {
+  if(xposition < 250 )
      xposition+=dx;
     }
 
