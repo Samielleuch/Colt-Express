@@ -431,7 +431,8 @@ public class Bandit {
                     if (!donneMessage) {
                         System.out.println(nom + " BOOM !");
                         //the other player drops his loot
-                        getOtherPlayer().dropLoot();
+                        getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
+                                getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
                         //Loot added to GameController
 
                         // the other player is knocked back
@@ -449,7 +450,6 @@ public class Bandit {
             }
 
 
-
         }
     }
 
@@ -462,6 +462,7 @@ public class Bandit {
 
     }
 
+
     public void draw(Graphics2D g) {
 
         g.drawImage(
@@ -473,9 +474,9 @@ public class Bandit {
                 null
         );
 
-        public Butin dropLoot () {
-
-
+        public Droppedbutin dropLoot ( int val, int xpos, int ypos){
+            Droppedbutin bt = new Droppedbutin("/Ressources/Butins/Dropped.png", val, xpos, ypos);
+            return (bt);
         }
     }
 }
