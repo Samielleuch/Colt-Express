@@ -14,6 +14,8 @@ public class GameController extends GameState {
     private String currentTurn = "";
     private String phase = "";
     private String score = "";
+    //nombre de tours maximal
+    public static final int NB_MAX_TOURS = 2;
 
     public GameController(GameStateManager gsm) {
         this.gsm = gsm;
@@ -24,10 +26,13 @@ public class GameController extends GameState {
 
         background = new Background();
         train = new Train(230, 160, "/Resources/Background/Train.png");
-        player1 = new Bandit(Positions.POSITION_1X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png",
-                "PLAYER 1 ", this);
-        player2 = new Bandit(Positions.POSITION_2X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png",
-                "PLAYER 2 ", this);
+        player1 = new Bandit(Positions.POSITION_1X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png"
+                ,60,95,"PLAYER 1 ", this);
+
+        //set x to 395
+        // 532
+        player2 = new Bandit(Positions.POSITION_2X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png"
+                ,395,95,"PLAYER 2 ", this);
 
         // if true means c'est son tour
         turns = new HashMap<>();
@@ -146,6 +151,15 @@ public class GameController extends GameState {
     public void keyReleased(int k) {
     }
 
+
+    public String getFinalResult(){
+        if(player1.getScore() > player2.getScore()) {
+         return("LE GAGNAT EST "+ player1.getNom());
+        }else if(player1.getScore() < player2.getScore()) {
+         return("LE GAGNAT EST "+ player2.getNom());
+        }else return ("LE RESULTAT EST : EGALITE :D  ");
+
+    }
     public Background getBackground() {
         return background;
     }

@@ -31,7 +31,7 @@ private Font font;
         //draw title
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("Asma game ",80,70);
+        g.drawString("Colt Express. ",80,70);
         // draw menu options
         g.setFont(font);
         for (int i = 0; i < options.length ; i++) {
@@ -48,7 +48,7 @@ private Font font;
     private void select() {
         if(currentChoice == 0 ){
             //start
-            gsm.setGameState(GameStateManager.LEVEL1STATE);
+            gsm.setGameState(GameStateManager.GAMECONTROLLERSTATE);
         }
         if(currentChoice == 1 ){
             //Help

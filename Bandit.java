@@ -10,6 +10,7 @@ public class Bandit {
     private BufferedImage tileSet;
     private BufferedImage character;
     private int score = 0;
+    private int nombreDeToursCourant = 1;
     private Vector<Butin> Loot;
     private float xposition;
     private float targetXPosition;
@@ -35,7 +36,7 @@ public class Bandit {
     private int counter = 0;
 
 
-    public Bandit(float xposition, float yposition, String src, String nom, GameController gp) {
+    public Bandit(float xposition, float yposition, String src,int x,int y ,  String nom, GameController gp) {
         try {
             tileSet = ImageIO.read(
                     getClass().getResourceAsStream(src));
@@ -43,8 +44,8 @@ public class Bandit {
             e.printStackTrace();
         }
         character = tileSet.getSubimage(
-                60,
-                95,
+                x,
+                y,
                 33,
                 54
         );
@@ -179,8 +180,6 @@ public class Bandit {
 
             if (!animated) {
                 System.out.println("...Executing Action");
-                System.out.println(Queue.size());
-                System.out.println(Queue);
                 counter++;
             }
             Actions a;
@@ -348,7 +347,6 @@ public class Bandit {
                 }
                 found = Boolean.FALSE;
             }
-            System.out.println(actionFinished);
         } else {
 
             // we Arrived !
@@ -361,7 +359,17 @@ public class Bandit {
             }
             // change the Turn !
             if (actionFinished) {
-                System.out.println(" SWITCH :D ");
+                System.out.println(nombreDeToursCourant);
+                nombreDeToursCourant ++ ;
+                 // chaque joueur joue son nbre max de tours
+                if (nombreDeToursCourant == GameController.NB_MAX_TOURS *2 )
+                {
+                 WinningState ws = (WinningState)gp.gsm.getGameStates().get(2);
+                 ws.setGagnant(gp.getFinalResult());
+                 gp.gsm.setGameState(GameStateManager.WINNINGSTATE);
+
+                }
+
                 if (gp.getTurns().get(gp.getPlayer1()).equals(Boolean.TRUE)) {
 
                     gp.getTurns().put(gp.getPlayer1(), Boolean.FALSE);
@@ -371,6 +379,8 @@ public class Bandit {
                     gp.getTurns().put(gp.getPlayer1(), Boolean.TRUE);
                     gp.getTurns().put(gp.getPlayer2(), Boolean.FALSE);
                 }
+
+
                 actionFinished = Boolean.FALSE;
             }
 
@@ -454,7 +464,9 @@ public class Bandit {
                             if (!donneMessage) {
                                 System.out.println(nom + " BRAQUE !");
                                 Braquer(b);
-                                Queue.remove(0);
+                                if( Queue.size()>0 ) {
+                                    Queue.remove(0);
+                                }
                             }
                             animated = Boolean.FALSE;
                             donneMessage = Boolean.FALSE;
@@ -593,7 +605,6 @@ public class Bandit {
 
                 break;
             }
-
 
         }
     }
