@@ -402,20 +402,39 @@ public class Bandit {
                 List<Butin> bt = gp.getButins();
 
                 for (Butin b : bt) {
+                    System.out.println(b.getClass().getName());
+                    if ((b.getClass().getName() == "Droppedbutin")) {
 
-                    if (xposition == b.getXposition() && (yposition == Positions.POSITION_BOTTOM_Y.getAction())) {
+                        // si c'est un DroppedButin il peut etre sur la toit
 
-                        found = true;
+                        if (xposition == b.getXposition()) {
 
-                        if (!donneMessage) {
-                            System.out.println(nom + " BRAQUE !");
-                            Braquer(b);
-                            Queue.remove(0);
+                            found = true;
+                            if (!donneMessage) {
+                                System.out.println(nom + " BRAQUE !");
+                                Braquer(b);
+                                Queue.remove(0);
+                            }
+                            animated = Boolean.FALSE;
+                            donneMessage = Boolean.FALSE;
 
                         }
-                        animated = Boolean.FALSE;
-                        donneMessage = Boolean.FALSE;
+                    } else {
+
+                        //sinon il doit etre dans l'interieur du train
+                        if (xposition == b.getXposition() && (yposition == Positions.POSITION_BOTTOM_Y.getAction())) {
+
+                            found = true;
+                            if (!donneMessage) {
+                                System.out.println(nom + " BRAQUE !");
+                                Braquer(b);
+                                Queue.remove(0);
+                            }
+                            animated = Boolean.FALSE;
+                            donneMessage = Boolean.FALSE;
+                        }
                     }
+
                 }
                 break;
             }
@@ -431,14 +450,13 @@ public class Bandit {
                     if (!donneMessage) {
                         System.out.println(nom + " BOOM !");
                         //the other player drops his loot
-                        getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
+                        Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
                                 getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
                         //Loot added to GameController
-
+                        gp.getButins().add(bt);
                         // the other player is knocked back
-                        getOtherPlayer().knockBack();
-
-
+                        getOtherPlayer().setXposition(Positions.returnRightpos((int) getOtherPlayer().getXposition()));
+                        //Clean up
                         Queue.remove(0);
 
                     }
@@ -473,10 +491,10 @@ public class Bandit {
                 ,
                 null
         );
+    }
 
-        public Droppedbutin dropLoot ( int val, int xpos, int ypos){
-            Droppedbutin bt = new Droppedbutin("/Ressources/Butins/Dropped.png", val, xpos, ypos);
-            return (bt);
-        }
+    public Droppedbutin dropLoot(int val, float xpos, float ypos) {
+        Droppedbutin bt = new Droppedbutin("/Resources/Butins/Dropped.png", val, (int) xpos, (int) ypos);
+        return (bt);
     }
 }
