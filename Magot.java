@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import java.awt.*;
 
 public class Magot extends Butin {
 
@@ -24,11 +23,6 @@ public class Magot extends Butin {
     @Override
     public void update() {
 
-    }
-
-    @Override
-    public void draw(Graphics2D g) {
-        g.drawImage(tileSet, xposition, yposition, 17, 17, null);
     }
 
 }

@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import java.awt.*;
 
 public class Bijoux extends Butin {
 
@@ -25,9 +24,5 @@ public class Bijoux extends Butin {
 
     }
 
-    @Override
-    public void draw(Graphics2D g) {
-        g.drawImage(tileSet, xposition, yposition, 17, 17, null);
-    }
 
 }

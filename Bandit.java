@@ -22,7 +22,7 @@ public class Bandit {
     private Boolean animated = Boolean.FALSE;
     private Boolean donneMessage = Boolean.FALSE;
     private Boolean actionFinished = Boolean.FALSE;
-    private Boolean foundButin = Boolean.FALSE;
+    private Boolean found = Boolean.FALSE;
 
     // il doit choisir 2 actions avant de les lancer
     private Boolean readyForAction = Boolean.FALSE;
@@ -285,11 +285,11 @@ public class Bandit {
                 //  Braque !
 
                 doAction(a);
-                if (!foundButin) {
+                if (!found) {
                     System.out.println(" Pas de Butin a Braquer ! ");
                     Queue.remove(0);
                 }
-                foundButin = Boolean.FALSE;
+                found = Boolean.FALSE;
 
             } else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_DROITE)) {
 
@@ -299,11 +299,11 @@ public class Bandit {
 
                 //clean up
 
-                if (!foundButin) {
+                if (!found) {
                     System.out.println(" Pas de Butin a Braquer ! ");
                     Queue.remove(0);
                 }
-                foundButin = Boolean.FALSE;
+                found = Boolean.FALSE;
 
             }
         } else {
@@ -405,14 +405,12 @@ public class Bandit {
 
                     if (xposition == b.getXposition() && (yposition == Positions.POSITION_BOTTOM_Y.getAction())) {
 
-                        foundButin = true;
+                        found = true;
 
                         if (!donneMessage) {
                             System.out.println(nom + " BRAQUE !");
                             Braquer(b);
                             Queue.remove(0);
-                            System.out.println(Queue.size());
-                            System.out.println(Queue);
 
                         }
                         animated = Boolean.FALSE;
@@ -422,8 +420,46 @@ public class Bandit {
                 break;
             }
 
+            case TIRE_DROITE: {
+
+                int vise = Positions.returnRightpos((int) xposition);
+                if (vise == getOtherPlayer().getXposition() && vise != 0) {
+                    //we found him
+
+                    found = true;
+
+                    if (!donneMessage) {
+                        System.out.println(nom + " BOOM !");
+                        //the other player drops his loot
+                        getOtherPlayer().dropLoot();
+                        //Loot added to GameController
+
+                        // the other player is knocked back
+                        getOtherPlayer().knockBack();
+
+
+                        Queue.remove(0);
+
+                    }
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+                }
+
+                break;
+            }
+
+
 
         }
+    }
+
+    private Bandit getOtherPlayer() {
+        if (this != gp.getPlayer2()) {
+            return gp.getPlayer2();
+        } else {
+            return gp.getPlayer1();
+        }
+
     }
 
     public void draw(Graphics2D g) {
@@ -437,5 +473,9 @@ public class Bandit {
                 null
         );
 
+        public Butin dropLoot () {
+
+
+        }
     }
 }
