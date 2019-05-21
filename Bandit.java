@@ -2,6 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class Bandit {
@@ -264,7 +265,6 @@ public class Bandit {
                 if (yposition > targetYPosition) {
 
                     yposition -= dy;
-
                     if (!donneMessage) System.out.println(nom + " goes UP !");
 
                     animated = Boolean.TRUE;
@@ -283,10 +283,11 @@ public class Bandit {
                 if (!animated)
                     setFutureposition(a);
 
-                Vector<Butin> bt = gp.getButins();
+                List<Butin> bt = gp.getButins();
                 Boolean found = Boolean.FALSE;
 
                 for (Butin b : bt) {
+
                     if (xposition == b.getXposition()) {
 
                         found = true;
@@ -294,9 +295,11 @@ public class Bandit {
                         if (!donneMessage) {
                             System.out.println(nom + " BRAQUE !");
                             Braquer(b);
+                            Queue.remove(0);
+                            System.out.println(Queue);
+
                         }
                         System.out.println("h");
-                        Queue.remove(0);
                         animated = Boolean.FALSE;
                         donneMessage = Boolean.FALSE;
 
@@ -305,6 +308,8 @@ public class Bandit {
                 }
                 if (!found) {
                     if (!donneMessage) System.out.println(" Pas de Butin a Braquer ! ");
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
                 }
 
 
@@ -376,17 +381,21 @@ public class Bandit {
                 break;
             }
             case HAUT: {
-                if (yposition == Positions.POSITION_TOP_Y.getAction()) {
-                    System.out.println("cant go further up");
-                }
 
                 if (yposition == Positions.POSITION_BOTTOM_Y.getAction()) {
                     targetYPosition = Positions.POSITION_TOP_Y.getAction();
+
+                }
+                if (yposition == Positions.POSITION_TOP_Y.getAction()) {
+                    targetYPosition = Positions.POSITION_TOP_Y.getAction();
+                    System.out.println("cant go further up");
+
                 }
                 break;
             }
             case BAS: {
                 if (yposition == Positions.POSITION_TOP_Y.getAction()) {
+
                     targetYPosition = Positions.POSITION_BOTTOM_Y.getAction();
                 }
 
@@ -410,7 +419,6 @@ public class Bandit {
                 ,
                 null
         );
-
 
     }
 }

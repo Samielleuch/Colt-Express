@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController extends GameState {
 
@@ -9,7 +9,7 @@ public class GameController extends GameState {
     private Train train;
     private Bandit player1;
     private Bandit player2;
-    private Vector<Butin> butins;
+    private CopyOnWriteArrayList<Butin> butins;
     private HashMap<Bandit, Boolean> turns;
     private String currentTurn = "";
     private String phase = "";
@@ -36,7 +36,7 @@ public class GameController extends GameState {
         turns.put(player2, Boolean.FALSE);
 
         // declare les butins
-        butins = new Vector<>();
+        butins = new CopyOnWriteArrayList<>();
 
         // on les instancie
 
@@ -53,10 +53,10 @@ public class GameController extends GameState {
             if (possibilities[x].equals("Bijoux"))
                 butins.add(new Bijoux("/Resources/Butins/Bijou.png"));
         }
-
+        miseAjoursScore();
     }
 
-    public Vector<Butin> getButins() {
+    public CopyOnWriteArrayList<Butin> getButins() {
         return butins;
     }
 
