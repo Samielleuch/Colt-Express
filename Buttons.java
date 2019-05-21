@@ -83,19 +83,27 @@ public class Buttons extends JPanel {
         go.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(gc.getPlayer1().getQueue());
                 // if its player 1 turn
                 if ((gc.getTurns().get(gc.getPlayer1()) == Boolean.TRUE)) {
                     if (gc.getPlayer1().getQueue().size() == 2) {
                         // he is ready !
                         gc.getPlayer1().setReadyForAction(Boolean.TRUE);
+                        gc.setPhase(" *ACTION* ");
+                    } else {
+                        System.out.println("il faut terminer la phase de planification !! ");
                     }
-
-
                 } else {
-                    System.out.println("il faut terminer la phase de planification !! ");
-                }
+                    //player 2 turn
+                    if (gc.getPlayer2().getQueue().size() == 2) {
+                        // he is ready !
+                        gc.getPlayer2().setReadyForAction(Boolean.TRUE);
 
+                        gc.setPhase(" *ACTION* ");
+
+                    } else {
+                        System.out.println("il faut terminer la phase de planification !! ");
+                    }
+                }
             }
 
         });

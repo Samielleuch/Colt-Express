@@ -13,15 +13,21 @@ public class Bandit {
     private float yposition;
     private float dx = 0.5f;
     private float dy = 0.5f;
+    private GameController gp;
     private Positions p;
     private Boolean animated = Boolean.FALSE;
     private Boolean donneMessage = Boolean.FALSE;
+    private Boolean actionFinished = Boolean.FALSE;
+
     // il doit choisir 2 actions avant de les lancer
     private Boolean readyForAction = Boolean.FALSE;
+
+
     private ArrayList<Actions> Queue = new ArrayList<>();
+    private int counter = 0;
 
 
-    public Bandit(float xposition, float yposition, String src, String nom) {
+    public Bandit(float xposition, float yposition, String src, String nom, GameController gp) {
         try {
             tileSet = ImageIO.read(
                     getClass().getResourceAsStream(src));
@@ -38,6 +44,7 @@ public class Bandit {
         this.xposition = xposition;
         this.yposition = yposition;
         this.nom = nom;
+        this.gp = gp;
     }
 
     public String getNom() {
@@ -139,16 +146,19 @@ public class Bandit {
     public void update() {
         if (readyForAction && !Queue.isEmpty()) {
 
-            // if (!animated) System.out.println("Im Ready!");
-
+            if (!animated) {
+                System.out.println("...Executing Action");
+                counter++;
+            }
             Actions a;
 
             //we go t the right
 
             if ((a = Queue.get(0)) == Actions.AVANT) {
                 // sets the position
-                if (!animated)
+                if (!animated) {
                     setFutureposition(a);
+                }
 
                 if (xposition < targetXPosition) {
                     xposition += dx;
@@ -247,7 +257,24 @@ public class Bandit {
             // we Arrived !
             animated = Boolean.FALSE;
             readyForAction = Boolean.FALSE;
+            //when the counter is 2 means 2 actions have been executed and we can change turns
+            if (counter == 2) {
+                actionFinished = Boolean.TRUE;
+                counter = 0;
+            }
+            // change the Turn !
+            if (actionFinished) {
+                if (gp.getTurns().get(gp.getPlayer1()).equals(Boolean.TRUE)) {
 
+                    gp.getTurns().put(gp.getPlayer1(), Boolean.FALSE);
+                    gp.getTurns().put(gp.getPlayer2(), Boolean.TRUE);
+
+                } else {
+                    gp.getTurns().put(gp.getPlayer1(), Boolean.TRUE);
+                    gp.getTurns().put(gp.getPlayer2(), Boolean.FALSE);
+                }
+                actionFinished = Boolean.FALSE;
+            }
         }
 
 

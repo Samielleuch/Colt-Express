@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public enum Positions {
 
     POSITION_1X(49),
@@ -18,4 +20,18 @@ public enum Positions {
     Positions(int action) {
         this.action = action;
     }
+
+    public static Positions returnRandomXPostion() {
+
+        Positions[] tab =
+                {POSITION_1X,
+                        POSITION_2X,
+                        POSITION_3X,
+                        POSITION_4X};
+
+        Random rand = new Random();
+        return (tab[rand.nextInt(4)]);
+
+    }
+
 }

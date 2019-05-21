@@ -8,6 +8,8 @@ public class GameController extends GameState {
     private Bandit player1;
     private Bandit player2;
     private HashMap<Bandit, Boolean> turns;
+    private String currentTurn = "";
+    private String phase = "";
 
     public GameController(GameStateManager gsm) {
         this.gsm = gsm;
@@ -19,9 +21,9 @@ public class GameController extends GameState {
         background = new Background();
         train = new Train(230, 160, "/Resources/Background/Train.png");
         player1 = new Bandit(Positions.POSITION_1X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png",
-                "PLAYER 1 ");
+                "PLAYER 1 ", this);
         player2 = new Bandit(Positions.POSITION_2X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png",
-                "PLAYER 2 ");
+                "PLAYER 2 ", this);
 
         // if true means c'est son tour
         turns = new HashMap<>();
@@ -30,17 +32,28 @@ public class GameController extends GameState {
         turns.put(player2, Boolean.FALSE);
 
 
+
     }
 
 
     public void update() {
         background.update();
-
         player1.update();
         player2.update();
 
-    }
+        if (turns.get(player1).equals(Boolean.TRUE)) {
+            if (player1.getQueue().isEmpty()) {
+                phase = " * PLANIFICATION * ";
+            }
+            currentTurn = " PLAYER 1's TURN !";
+        } else {
+            if (player2.getQueue().isEmpty()) {
+                phase = " * PLANIFICATION * ";
+            }
+            currentTurn = " PLAYER 2's TURN !";
+        }
 
+    }
     public void draw(Graphics2D g) {
         // clear screen
         g.setColor(Color.WHITE);
@@ -58,6 +71,35 @@ public class GameController extends GameState {
         player1.draw(g);
         player2.draw(g);
 
+
+        // draw current Phase !
+
+        g.setColor(new Color(128, 24, 38));
+        g.setFont(new Font("Helvetica", Font.PLAIN, 13));
+        g.drawString(phase, 105, 50);
+
+        // Draw The Turn string
+        g.setColor(new Color(128, 68, 38));
+        g.setFont(new Font("Helvetica", Font.PLAIN, 18));
+        g.drawString(currentTurn, 80, 70);
+
+
+    }
+
+    public String getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public void setCurrentTurn(String currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    public String getPhase() {
+        return phase;
+    }
+
+    public void setPhase(String phase) {
+        this.phase = phase;
     }
 
     public void keyPressed(int k) {
@@ -107,10 +149,10 @@ public class GameController extends GameState {
     }
 
     public void QueuemoveRight() {
-        System.out.println(turns.get(player1));
+        System.out.println(turns.get("Player 1 " + player1));
+        System.out.println(turns.get("player2" + player2));
         if (turns.get(player1).equals(Boolean.TRUE)) {
             if (player1.getQueue().size() != 2) {
-                System.out.println("went in ");
                 // le tour de player 1
                 System.out.println(player1.getNom() + " veut aller a droite ");
                 player1.getQueue().add(Actions.AVANT);
@@ -121,7 +163,6 @@ public class GameController extends GameState {
         } else {
 
             if (player2.getQueue().size() != 2) {
-                System.out.println("went in ");
                 // le tour de player 2
                 System.out.println(player2.getNom() + " veut aller a droite ");
                 player2.getQueue().add(Actions.AVANT);
@@ -133,7 +174,8 @@ public class GameController extends GameState {
 
 
     public void QueuemoveLeft() {
-        System.out.println(turns.get(player1));
+        System.out.println(turns.get("Player 1 " + player1));
+        System.out.println(turns.get("player2" + player2));
         if (turns.get(player1).equals(Boolean.TRUE)) {
             if (player1.getQueue().size() != 2) {
                 // le tour de player 1
@@ -155,7 +197,8 @@ public class GameController extends GameState {
     }
 
     public void QueuemoveUP() {
-        System.out.println(turns.get(player1));
+        System.out.println(turns.get("Player 1 " + player1));
+        System.out.println(turns.get("player2" + player2));
         if (turns.get(player1).equals(Boolean.TRUE)) {
             if (player1.getQueue().size() != 2) {
                 // le tour de player 1
@@ -179,7 +222,9 @@ public class GameController extends GameState {
     public void QueuemoveDown() {
 
 
-        System.out.println(turns.get(player1));
+        System.out.println(turns.get("Player 1 " + player1));
+        System.out.println(turns.get("player2" + player2));
+
         if (turns.get(player1).equals(Boolean.TRUE)) {
 
             if (player1.getQueue().size() != 2) {
