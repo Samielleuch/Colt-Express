@@ -53,25 +53,25 @@ public class Buttons extends JPanel {
         tire_haut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("droite dude ");
+                gc.QueueTireHaut();
             }
         });
         tire_bas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("droite dude ");
+                gc.QueueTireBas();
             }
         });
         tire_droite.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("droite dude ");
+                gc.QueueTireDroite();
             }
         });
         tire_gauche.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("droite dude ");
+                gc.QueueTireGauche();
             }
         });
         braque.addActionListener(new ActionListener() {

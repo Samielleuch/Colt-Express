@@ -3,5 +3,9 @@ public enum Actions {
     ARRIERE,
     HAUT,
     BAS,
-    BRAQUE
+    BRAQUE,
+    TIRE_DROITE,
+    TIRE_BAS,
+    TIRE_HAUT,
+    TIRE_GAUCHE
 }

@@ -304,6 +304,102 @@ public class GameController extends GameState {
 
         }
     }
+
+    public void QueueTireDroite() {
+        if (turns.get(player1).equals(Boolean.TRUE)) {
+
+            if (player1.getQueue().size() != 2) {
+                // le tour de player 1
+                System.out.println(player1.getNom() + " veut Tirer a droite  ");
+                player1.getQueue().add(Actions.TIRE_DROITE);
+
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+        } else {
+            if (player2.getQueue().size() != 2) {
+
+                // le tour de player 2
+                System.out.println(player2.getNom() + " veut Tirer a droite ");
+                player2.getQueue().add(Actions.BRAQUE);
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+
+        }
+    }
+
+    public void QueueTireGauche() {
+        if (turns.get(player1).equals(Boolean.TRUE)) {
+
+            if (player1.getQueue().size() != 2) {
+                // le tour de player 1
+                System.out.println(player1.getNom() + " veut Tirer a gauche  ");
+                player1.getQueue().add(Actions.TIRE_DROITE);
+
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+        } else {
+            if (player2.getQueue().size() != 2) {
+
+                // le tour de player 2
+                System.out.println(player2.getNom() + " veut Tirer a gauche ");
+                player2.getQueue().add(Actions.BRAQUE);
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+
+        }
+    }
+
+    public void QueueTireHaut() {
+        if (turns.get(player1).equals(Boolean.TRUE)) {
+
+            if (player1.getQueue().size() != 2) {
+                // le tour de player 1
+                System.out.println(player1.getNom() + " veut Tirer vers le haut   ");
+                player1.getQueue().add(Actions.TIRE_DROITE);
+
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+        } else {
+            if (player2.getQueue().size() != 2) {
+
+                // le tour de player 2
+                System.out.println(player2.getNom() + " veut Tirer vers le haut ");
+                player2.getQueue().add(Actions.BRAQUE);
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+
+        }
+    }
+
+    public void QueueTireBas() {
+        if (turns.get(player1).equals(Boolean.TRUE)) {
+
+            if (player1.getQueue().size() != 2) {
+                // le tour de player 1
+                System.out.println(player1.getNom() + " veut Tirer vers le bas   ");
+                player1.getQueue().add(Actions.TIRE_DROITE);
+
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+        } else {
+            if (player2.getQueue().size() != 2) {
+
+                // le tour de player 2
+                System.out.println(player2.getNom() + " veut Tirer vers le bas ");
+                player2.getQueue().add(Actions.BRAQUE);
+            } else {
+                System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
+            }
+
+        }
+    }
 }
 
 

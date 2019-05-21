@@ -22,11 +22,10 @@ public class Bandit {
     private Boolean animated = Boolean.FALSE;
     private Boolean donneMessage = Boolean.FALSE;
     private Boolean actionFinished = Boolean.FALSE;
+    private Boolean foundButin = Boolean.FALSE;
 
     // il doit choisir 2 actions avant de les lancer
     private Boolean readyForAction = Boolean.FALSE;
-
-
     private ArrayList<Actions> Queue = new ArrayList<>();
     private int counter = 0;
 
@@ -73,6 +72,7 @@ public class Bandit {
         gp.getButins().remove(bt);
 
     }
+
     public String getNom() {
         return nom;
     }
@@ -174,6 +174,8 @@ public class Bandit {
 
             if (!animated) {
                 System.out.println("...Executing Action");
+                System.out.println(Queue.size());
+                System.out.println(Queue);
                 counter++;
             }
 
@@ -184,7 +186,7 @@ public class Bandit {
             if ((a = Queue.get(0)) == Actions.AVANT) {
                 // sets the position
                 if (!animated) {
-                    setFutureposition(a);
+                    doAction(a);
                 }
 
                 if (xposition < targetXPosition) {
@@ -211,7 +213,7 @@ public class Bandit {
             else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.ARRIERE)) {
                 // sets the position
                 if (!animated)
-                    setFutureposition(a);
+                    doAction(a);
                 if (xposition > targetXPosition) {
 
                     xposition -= dx;
@@ -236,7 +238,7 @@ public class Bandit {
             else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BAS)) {
                 // sets the position
                 if (!animated)
-                    setFutureposition(a);
+                    doAction(a);
                 if (yposition < targetYPosition) {
 
                     yposition += dy;
@@ -261,7 +263,7 @@ public class Bandit {
             else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.HAUT)) {
                 // sets the position
                 if (!animated)
-                    setFutureposition(a);
+                    doAction(a);
                 if (yposition > targetYPosition) {
 
                     yposition -= dy;
@@ -279,39 +281,29 @@ public class Bandit {
                 }
 
             } else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BRAQUE)) {
-                // sets the position
-                if (!animated)
-                    setFutureposition(a);
 
-                List<Butin> bt = gp.getButins();
-                Boolean found = Boolean.FALSE;
+                //  Braque !
 
-                for (Butin b : bt) {
-
-                    if (xposition == b.getXposition()) {
-
-                        found = true;
-
-                        if (!donneMessage) {
-                            System.out.println(nom + " BRAQUE !");
-                            Braquer(b);
-                            Queue.remove(0);
-                            System.out.println(Queue);
-
-                        }
-                        System.out.println("h");
-                        animated = Boolean.FALSE;
-                        donneMessage = Boolean.FALSE;
-
-
-                    }
+                doAction(a);
+                if (!foundButin) {
+                    System.out.println(" Pas de Butin a Braquer ! ");
+                    Queue.remove(0);
                 }
-                if (!found) {
-                    if (!donneMessage) System.out.println(" Pas de Butin a Braquer ! ");
-                    animated = Boolean.FALSE;
-                    donneMessage = Boolean.FALSE;
-                }
+                foundButin = Boolean.FALSE;
 
+            } else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_DROITE)) {
+
+                //  Tire !
+
+                doAction(a);
+
+                //clean up
+
+                if (!foundButin) {
+                    System.out.println(" Pas de Butin a Braquer ! ");
+                    Queue.remove(0);
+                }
+                foundButin = Boolean.FALSE;
 
             }
         } else {
@@ -337,15 +329,16 @@ public class Bandit {
                 }
                 actionFinished = Boolean.FALSE;
             }
+
         }
 
 
     }
 
-    public void setFutureposition(Actions a) {
+    public void doAction(Actions a) {
 
         switch (a) {
-
+            // for positions we set position
             case AVANT: {
                 if (xposition == Positions.POSITION_1X.getAction()) {
                     targetXPosition = Positions.POSITION_2X.getAction();
@@ -401,6 +394,30 @@ public class Bandit {
 
                 if (yposition == Positions.POSITION_BOTTOM_Y.getAction()) {
                     System.out.println("cant go further Down ");
+                }
+                break;
+            }
+            case BRAQUE: {
+
+                List<Butin> bt = gp.getButins();
+
+                for (Butin b : bt) {
+
+                    if (xposition == b.getXposition() && (yposition == Positions.POSITION_BOTTOM_Y.getAction())) {
+
+                        foundButin = true;
+
+                        if (!donneMessage) {
+                            System.out.println(nom + " BRAQUE !");
+                            Braquer(b);
+                            Queue.remove(0);
+                            System.out.println(Queue.size());
+                            System.out.println(Queue);
+
+                        }
+                        animated = Boolean.FALSE;
+                        donneMessage = Boolean.FALSE;
+                    }
                 }
                 break;
             }
