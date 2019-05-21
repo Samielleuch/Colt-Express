@@ -8,7 +8,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     // dimensions
     public static final int WIDTH = 320;
     public static final int HEIGHT = 240;
-    public static final int SCALE = 2;
+    public static final int SCALE = 3;
     private static final long serialVersionUID = 1L;
     // game thread
     private Thread thread;
@@ -18,6 +18,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     //image
     private BufferedImage image;
     private Graphics2D g;
+
+
     // game state manager
     private GameStateManager gsm;
 
@@ -27,8 +29,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         setFocusable(true);
         requestFocus();
+        // create the game state manager :
+        gsm = new GameStateManager(this);
     }
 
+    public GameStateManager getGsm() {
+        return gsm;
+    }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
@@ -47,9 +54,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         g = (Graphics2D) image.getGraphics();
         running = true;
-        // create the game state manager :
 
-        gsm = new GameStateManager();
     }
 
     @Override
@@ -86,6 +91,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     private void update() {
         gsm.update();
+        // reobtenir le focus sur ce panel
+        grabFocus();
     }
 
     private void drawToScreen() {

@@ -7,10 +7,11 @@ public class Train {
     private BufferedImage tileSet ;
     private BufferedImage trainHead ;
     private BufferedImage wagons;
+    private final int NB_WAGONS = 3;
     private float xhead;
     private float yhead;
-    private float[] xwagons = new float[3];
-    private float[] ywagons = new float[3];
+    private float[] xwagons = new float[NB_WAGONS];
+    private float[] ywagons = new float[NB_WAGONS];
 
     public Train(float xhead, float yhead , String src ) {
         try {
@@ -38,7 +39,7 @@ public class Train {
         xwagons[0] = xhead - 64 ;
         ywagons[0] = yhead + 4 ;
 
-        for(int i = 1 ; i<3 ; i++ ){
+        for (int i = 1; i < NB_WAGONS; i++) {
             xwagons[i] = xwagons[i-1]-64 ;
             ywagons[i] = ywagons[i-1] ;
         }
@@ -57,7 +58,7 @@ public class Train {
         );
 
         //draw wagons
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < NB_WAGONS; i++) {
         g.drawImage(
                 wagons,
                 (int)xwagons[i],

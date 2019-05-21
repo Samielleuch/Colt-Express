@@ -1,21 +1,31 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Bandit {
-
-    private BufferedImage tileSet ;
-    private BufferedImage character ;
-    private float xposition ;
-    private float yposition ;
+    private String nom;
+    private BufferedImage tileSet;
+    private BufferedImage character;
+    private float xposition;
+    private float targetXPosition;
+    private float targetYPosition;
+    private float yposition;
     private float dx = 0.5f;
     private float dy = 0.5f;
+    private Positions p;
+    private Boolean animated = Boolean.FALSE;
+    private Boolean donneMessage = Boolean.FALSE;
+    // il doit choisir 2 actions avant de les lancer
+    private Boolean readyForAction = Boolean.FALSE;
+    private ArrayList<Actions> Queue = new ArrayList<>();
 
-    public Bandit(float xposition, float yposition , String src ) {
+
+    public Bandit(float xposition, float yposition, String src, String nom) {
         try {
             tileSet = ImageIO.read(
                     getClass().getResourceAsStream(src));
-        }catch(Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         character = tileSet.getSubimage(
@@ -27,25 +37,295 @@ public class Bandit {
 
         this.xposition = xposition;
         this.yposition = yposition;
+        this.nom = nom;
+    }
 
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public BufferedImage getTileSet() {
+        return tileSet;
+    }
+
+    public void setTileSet(BufferedImage tileSet) {
+        this.tileSet = tileSet;
+    }
+
+    public float getXposition() {
+        return xposition;
+    }
+
+    public void setXposition(float xposition) {
+        this.xposition = xposition;
+    }
+
+    public float getYposition() {
+        return yposition;
+    }
+
+    public void setYposition(float yposition) {
+        this.yposition = yposition;
+    }
+
+    public Boolean getAnimated() {
+        return animated;
+    }
+
+    public void setAnimated(Boolean animated) {
+        this.animated = animated;
+    }
+
+    public BufferedImage getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(BufferedImage character) {
+        this.character = character;
+    }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public void setDx(float dx) {
+        this.dx = dx;
+    }
+
+    public float getDy() {
+        return dy;
+    }
+
+    public void setDy(float dy) {
+        this.dy = dy;
+    }
+
+    public Positions getP() {
+        return p;
+    }
+
+    public void setP(Positions p) {
+        this.p = p;
+    }
+
+    public float getTargetXPosition() {
+        return targetXPosition;
+    }
+
+    public void setTargetXPosition(float targetXPosition) {
+        this.targetXPosition = targetXPosition;
+    }
+
+    public Boolean getReadyForAction() {
+        return readyForAction;
+    }
+
+    public void setReadyForAction(Boolean readyForAction) {
+        this.readyForAction = readyForAction;
+    }
+
+    public ArrayList<Actions> getQueue() {
+        return Queue;
+    }
+
+    public void setQueue(ArrayList<Actions> queue) {
+        Queue = queue;
     }
 
     public void update() {
-  if(xposition < 250 )
-     xposition+=dx;
+        if (readyForAction && !Queue.isEmpty()) {
+
+            // if (!animated) System.out.println("Im Ready!");
+
+            Actions a;
+
+            //we go t the right
+
+            if ((a = Queue.get(0)) == Actions.AVANT) {
+                // sets the position
+                if (!animated)
+                    setFutureposition(a);
+
+                if (xposition < targetXPosition) {
+                    xposition += dx;
+
+                    if (!donneMessage) System.out.println(nom + " goes right!");
+
+                    animated = Boolean.TRUE;
+                    donneMessage = Boolean.TRUE;
+
+
+                } else {
+                    Queue.remove(0);
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+
+                }
+
+            }
+
+            //we go to the Left
+
+
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.ARRIERE)) {
+                // sets the position
+                if (!animated)
+                    setFutureposition(a);
+                if (xposition > targetXPosition) {
+
+                    xposition -= dx;
+
+                    if (!donneMessage) System.out.println(nom + " goes Left !");
+
+                    animated = Boolean.TRUE;
+                    donneMessage = Boolean.TRUE;
+
+
+                } else {
+                    Queue.remove(0);
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+
+                }
+
+            }
+
+            //Go Down !
+
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BAS)) {
+                // sets the position
+                if (!animated)
+                    setFutureposition(a);
+                if (yposition < targetYPosition) {
+
+                    yposition += dy;
+
+                    if (!donneMessage) System.out.println(nom + " goes Down !");
+
+                    animated = Boolean.TRUE;
+                    donneMessage = Boolean.TRUE;
+
+
+                } else {
+                    Queue.remove(0);
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+
+                }
+            }
+
+
+            //GO UP !
+
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.HAUT)) {
+                // sets the position
+                if (!animated)
+                    setFutureposition(a);
+                if (yposition > targetYPosition) {
+
+                    yposition -= dy;
+
+                    if (!donneMessage) System.out.println(nom + " goes UP !");
+
+                    animated = Boolean.TRUE;
+                    donneMessage = Boolean.TRUE;
+
+
+                } else {
+                    Queue.remove(0);
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+
+                }
+
+            }
+        } else {
+            // we Arrived !
+            animated = Boolean.FALSE;
+            readyForAction = Boolean.FALSE;
+
+        }
+
+
+    }
+
+    public void setFutureposition(Actions a) {
+
+        switch (a) {
+
+            case AVANT: {
+                if (xposition == Positions.POSITION_1X.getAction()) {
+                    targetXPosition = Positions.POSITION_2X.getAction();
+                }
+
+                if (xposition == Positions.POSITION_2X.getAction()) {
+                    targetXPosition = Positions.POSITION_3X.getAction();
+                }
+                if (xposition == Positions.POSITION_3X.getAction()) {
+                    targetXPosition = Positions.POSITION_4X.getAction();
+                }
+                if (xposition == Positions.POSITION_4X.getAction()) {
+                    System.out.println("you can't go further to the right");
+                }
+
+                break;
+            }
+            case ARRIERE: {
+                if (xposition == Positions.POSITION_2X.getAction()) {
+                    targetXPosition = Positions.POSITION_1X.getAction();
+                }
+
+                if (xposition == Positions.POSITION_3X.getAction()) {
+                    targetXPosition = Positions.POSITION_2X.getAction();
+                }
+                if (xposition == Positions.POSITION_4X.getAction()) {
+                    targetXPosition = Positions.POSITION_3X.getAction();
+                }
+                if (xposition == Positions.POSITION_1X.getAction()) {
+                    System.out.println("you can't go further to the Left ");
+                }
+
+                break;
+            }
+            case HAUT: {
+                if (yposition == Positions.POSITION_TOP_Y.getAction()) {
+                    System.out.println("cant go further up");
+                }
+
+                if (yposition == Positions.POSITION_BOTTOM_Y.getAction()) {
+                    targetYPosition = Positions.POSITION_TOP_Y.getAction();
+                }
+                break;
+            }
+            case BAS: {
+                if (yposition == Positions.POSITION_TOP_Y.getAction()) {
+                    targetYPosition = Positions.POSITION_BOTTOM_Y.getAction();
+                }
+
+                if (yposition == Positions.POSITION_BOTTOM_Y.getAction()) {
+                    System.out.println("cant go further Down ");
+                }
+                break;
+            }
+
+
+        }
     }
 
     public void draw(Graphics2D g) {
 
         g.drawImage(
                 character,
-                (int)xposition ,
-                (int)yposition ,
+                (int) xposition,
+                (int) yposition,
                 16, 23
                 ,
                 null
         );
-
 
 
     }
