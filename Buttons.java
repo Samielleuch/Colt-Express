@@ -77,7 +77,7 @@ public class Buttons extends JPanel {
         braque.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("droite dude ");
+                gc.QueueBraque();
             }
         });
         go.addActionListener(new ActionListener() {

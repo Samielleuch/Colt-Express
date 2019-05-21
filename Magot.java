@@ -1,9 +1,9 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 
-public class Bijoux extends Butin {
+public class Magot extends Butin {
 
-    public Bijoux(String src) {
+    public Magot(String src) {
 
         //on prend tous l'image
         try {
@@ -13,9 +13,10 @@ public class Bijoux extends Butin {
             e.printStackTrace();
         }
 
+        this.valeur = 1000;
 
-        this.valeur = 500;
-        this.xposition = Positions.returnRandomXPostion().getAction();
+        //toujours dans la locomotive
+        this.xposition = Positions.POSITION_4X.getAction();
         //les Butin sont a l'interieur
         this.yposition = Positions.POSITION_BOTTOM_Y.getAction();
     }

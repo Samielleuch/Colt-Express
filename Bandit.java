@@ -2,11 +2,14 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class Bandit {
     private String nom;
     private BufferedImage tileSet;
     private BufferedImage character;
+    private int score = 0;
+    private Vector<Butin> Loot;
     private float xposition;
     private float targetXPosition;
     private float targetYPosition;
@@ -45,8 +48,30 @@ public class Bandit {
         this.yposition = yposition;
         this.nom = nom;
         this.gp = gp;
+        this.Loot = new Vector<>();
+
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    private void calculeScore() {
+        score = 0;
+        for (Butin b : Loot) {
+            score += b.getValeur();
+        }
+
+    }
+
+    public void Braquer(Butin bt) {
+
+        Loot.add(bt);
+        calculeScore();
+        gp.miseAjoursScore();
+        gp.getButins().remove(bt);
+
+    }
     public String getNom() {
         return nom;
     }
@@ -150,9 +175,10 @@ public class Bandit {
                 System.out.println("...Executing Action");
                 counter++;
             }
+
             Actions a;
 
-            //we go t the right
+            //we go to the right
 
             if ((a = Queue.get(0)) == Actions.AVANT) {
                 // sets the position
@@ -252,8 +278,39 @@ public class Bandit {
 
                 }
 
+            } else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BRAQUE)) {
+                // sets the position
+                if (!animated)
+                    setFutureposition(a);
+
+                Vector<Butin> bt = gp.getButins();
+                Boolean found = Boolean.FALSE;
+
+                for (Butin b : bt) {
+                    if (xposition == b.getXposition()) {
+
+                        found = true;
+
+                        if (!donneMessage) {
+                            System.out.println(nom + " BRAQUE !");
+                            Braquer(b);
+                        }
+                        System.out.println("h");
+                        Queue.remove(0);
+                        animated = Boolean.FALSE;
+                        donneMessage = Boolean.FALSE;
+
+
+                    }
+                }
+                if (!found) {
+                    if (!donneMessage) System.out.println(" Pas de Butin a Braquer ! ");
+                }
+
+
             }
         } else {
+
             // we Arrived !
             animated = Boolean.FALSE;
             readyForAction = Boolean.FALSE;

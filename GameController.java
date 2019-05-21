@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Vector;
 
 public class GameController extends GameState {
 
@@ -7,9 +9,11 @@ public class GameController extends GameState {
     private Train train;
     private Bandit player1;
     private Bandit player2;
+    private Vector<Butin> butins;
     private HashMap<Bandit, Boolean> turns;
     private String currentTurn = "";
     private String phase = "";
+    private String score = "";
 
     public GameController(GameStateManager gsm) {
         this.gsm = gsm;
@@ -31,10 +35,30 @@ public class GameController extends GameState {
         turns.put(player1, Boolean.TRUE);
         turns.put(player2, Boolean.FALSE);
 
+        // declare les butins
+        butins = new Vector<>();
 
+        // on les instancie
+
+        // 1 Magot dans la locomotive ;
+        butins.add(new Magot("/Resources/Butins/Magot.png"));
+
+        String[] possibilities = {"Bources", "Bijoux"};
+        Random rand = new Random();
+        int x = 0;
+        for (int i = 1; i < Butin.NB_BUTTIN; i++) {
+            x = rand.nextInt(2);
+            if (possibilities[x].equals("Bources"))
+                butins.add(new Bourses("/Resources/Butins/Bource.png"));
+            if (possibilities[x].equals("Bijoux"))
+                butins.add(new Bijoux("/Resources/Butins/Bijou.png"));
+        }
 
     }
 
+    public Vector<Butin> getButins() {
+        return butins;
+    }
 
     public void update() {
         background.update();
@@ -42,6 +66,7 @@ public class GameController extends GameState {
         player2.update();
 
         if (turns.get(player1).equals(Boolean.TRUE)) {
+
             if (player1.getQueue().isEmpty()) {
                 phase = " * PLANIFICATION * ";
             }
@@ -66,8 +91,14 @@ public class GameController extends GameState {
         // draw train
         train.draw(g);
 
-        // draw bandit
+        //draw Butin
+        for (Butin b : butins) {
+            if (b == null) System.out.println("im null lol ");
+            b.draw(g);
 
+        }
+
+        // draw bandit
         player1.draw(g);
         player2.draw(g);
 
@@ -77,6 +108,12 @@ public class GameController extends GameState {
         g.setColor(new Color(128, 24, 38));
         g.setFont(new Font("Helvetica", Font.PLAIN, 13));
         g.drawString(phase, 105, 50);
+
+        // draw Score  !
+
+        g.setColor(new Color(51, 43, 89));
+        g.setFont(new Font("Helvetica", Font.PLAIN, 8));
+        g.drawString(score, 80, 15);
 
         // Draw The Turn string
         g.setColor(new Color(128, 68, 38));
@@ -148,9 +185,11 @@ public class GameController extends GameState {
         this.turns = turns;
     }
 
+    public void miseAjoursScore() {
+        score = player1.getNom() + " = " + player1.getScore() + "$ : " + player2.getNom() + " = " + player2.getScore() + "$";
+    }
+
     public void QueuemoveRight() {
-        System.out.println(turns.get("Player 1 " + player1));
-        System.out.println(turns.get("player2" + player2));
         if (turns.get(player1).equals(Boolean.TRUE)) {
             if (player1.getQueue().size() != 2) {
                 // le tour de player 1
@@ -174,8 +213,7 @@ public class GameController extends GameState {
 
 
     public void QueuemoveLeft() {
-        System.out.println(turns.get("Player 1 " + player1));
-        System.out.println(turns.get("player2" + player2));
+
         if (turns.get(player1).equals(Boolean.TRUE)) {
             if (player1.getQueue().size() != 2) {
                 // le tour de player 1
@@ -197,8 +235,7 @@ public class GameController extends GameState {
     }
 
     public void QueuemoveUP() {
-        System.out.println(turns.get("Player 1 " + player1));
-        System.out.println(turns.get("player2" + player2));
+
         if (turns.get(player1).equals(Boolean.TRUE)) {
             if (player1.getQueue().size() != 2) {
                 // le tour de player 1
@@ -222,8 +259,6 @@ public class GameController extends GameState {
     public void QueuemoveDown() {
 
 
-        System.out.println(turns.get("Player 1 " + player1));
-        System.out.println(turns.get("player2" + player2));
 
         if (turns.get(player1).equals(Boolean.TRUE)) {
 
@@ -248,12 +283,11 @@ public class GameController extends GameState {
     }
 
     public void QueueBraque() {
-        System.out.println(turns.get(player1));
         if (turns.get(player1).equals(Boolean.TRUE)) {
-            if (player1.getQueue().size() != 2) {
 
+            if (player1.getQueue().size() != 2) {
                 // le tour de player 1
-                System.out.println(player1.getNom() + " veut descendre ");
+                System.out.println(player1.getNom() + " veut braquer  ");
                 player1.getQueue().add(Actions.BRAQUE);
             } else {
                 System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
@@ -262,7 +296,7 @@ public class GameController extends GameState {
             if (player2.getQueue().size() != 2) {
 
                 // le tour de player 2
-                System.out.println(player2.getNom() + " veut descendre ");
+                System.out.println(player2.getNom() + " veut braquer ");
                 player2.getQueue().add(Actions.BRAQUE);
             } else {
                 System.out.println("on peut seleuemnt choisir 2 Actions ! veuiller Actionner avant ");
