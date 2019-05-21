@@ -19,9 +19,14 @@ public class Bandit {
     private float dy = 0.5f;
     private GameController gp;
     private Positions p;
+
+    //n'est pas entrain d'animer
     private Boolean animated = Boolean.FALSE;
+    // on peut ecrire un message
     private Boolean donneMessage = Boolean.FALSE;
+    // on a pas terminer l'action
     private Boolean actionFinished = Boolean.FALSE;
+    // on a pas  trouver le butin ou le joueur
     private Boolean found = Boolean.FALSE;
 
     // il doit choisir 2 actions avant de les lancer
@@ -178,11 +183,8 @@ public class Bandit {
                 System.out.println(Queue);
                 counter++;
             }
-
             Actions a;
-
             //we go to the right
-
             if ((a = Queue.get(0)) == Actions.AVANT) {
                 // sets the position
                 if (!animated) {
@@ -206,10 +208,7 @@ public class Bandit {
                 }
 
             }
-
             //we go to the Left
-
-
             else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.ARRIERE)) {
                 // sets the position
                 if (!animated)
@@ -232,9 +231,7 @@ public class Bandit {
                 }
 
             }
-
             //Go Down !
-
             else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BAS)) {
                 // sets the position
                 if (!animated)
@@ -256,10 +253,7 @@ public class Bandit {
 
                 }
             }
-
-
             //GO UP !
-
             else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.HAUT)) {
                 // sets the position
                 if (!animated)
@@ -280,7 +274,9 @@ public class Bandit {
 
                 }
 
-            } else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BRAQUE)) {
+            }
+            //Braque
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.BRAQUE)) {
 
                 //  Braque !
 
@@ -291,7 +287,9 @@ public class Bandit {
                 }
                 found = Boolean.FALSE;
 
-            } else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_DROITE)) {
+            }
+            //Tire a droite
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_DROITE)) {
 
                 //  Tire !
 
@@ -300,12 +298,57 @@ public class Bandit {
                 //clean up
 
                 if (!found) {
-                    System.out.println(" Pas de Butin a Braquer ! ");
+                    System.out.println(" il n' y a personne ! ");
                     Queue.remove(0);
                 }
                 found = Boolean.FALSE;
 
             }
+            //tire a gauche
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_GAUCHE)) {
+
+                //  Tire !
+
+                doAction(a);
+
+                //clean up
+
+                if (!found) {
+                    System.out.println(" il n 'y a personne ! ");
+                    Queue.remove(0);
+                }
+                found = Boolean.FALSE;
+
+            }
+            //tire a l'haut
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_HAUT)) {
+
+                //  Tire !
+
+                doAction(a);
+
+                //clean up
+
+                if (!found) {
+                    System.out.println(" il n 'y a personne ! ");
+                    Queue.remove(0);
+                }
+                found = Boolean.FALSE;
+
+            }
+            //tirer vers le bas
+            else if ((!Queue.isEmpty()) && ((a = Queue.get(0)) == Actions.TIRE_BAS)) {
+
+                //  Tire !
+                doAction(a);
+                //clean up
+                if (!found) {
+                    System.out.println(" il n 'y a personne ! ");
+                    Queue.remove(0);
+                }
+                found = Boolean.FALSE;
+            }
+            System.out.println(actionFinished);
         } else {
 
             // we Arrived !
@@ -318,6 +361,7 @@ public class Bandit {
             }
             // change the Turn !
             if (actionFinished) {
+                System.out.println(" SWITCH :D ");
                 if (gp.getTurns().get(gp.getPlayer1()).equals(Boolean.TRUE)) {
 
                     gp.getTurns().put(gp.getPlayer1(), Boolean.FALSE);
@@ -331,7 +375,6 @@ public class Bandit {
             }
 
         }
-
 
     }
 
@@ -402,24 +445,7 @@ public class Bandit {
                 List<Butin> bt = gp.getButins();
 
                 for (Butin b : bt) {
-                    System.out.println(b.getClass().getName());
-                    if ((b.getClass().getName() == "Droppedbutin")) {
-
-                        // si c'est un DroppedButin il peut etre sur la toit
-
-                        if (xposition == b.getXposition()) {
-
-                            found = true;
-                            if (!donneMessage) {
-                                System.out.println(nom + " BRAQUE !");
-                                Braquer(b);
-                                Queue.remove(0);
-                            }
-                            animated = Boolean.FALSE;
-                            donneMessage = Boolean.FALSE;
-
-                        }
-                    } else {
+                    if ((b.getClass().getName() != "Droppedbutin")) {
 
                         //sinon il doit etre dans l'interieur du train
                         if (xposition == b.getXposition() && (yposition == Positions.POSITION_BOTTOM_Y.getAction())) {
@@ -433,12 +459,27 @@ public class Bandit {
                             animated = Boolean.FALSE;
                             donneMessage = Boolean.FALSE;
                         }
+                    } else {
+
+                        // si c'est un DroppedButin il peut etre sur la toit
+                        // donc on verifie les deux
+                        if (xposition == b.getXposition() && (yposition == b.getYposition())) {
+                            // je suis situé dans la meme position que celle du Butin
+                            found = true;
+                            if (!donneMessage) {
+                                System.out.println(nom + " BRAQUE !");
+                                Braquer(b);
+                                Queue.remove(0);
+                            }
+                            animated = Boolean.FALSE;
+                            donneMessage = Boolean.FALSE;
+
+                        }
                     }
 
                 }
                 break;
             }
-
             case TIRE_DROITE: {
 
                 int vise = Positions.returnRightpos((int) xposition);
@@ -455,7 +496,93 @@ public class Bandit {
                         //Loot added to GameController
                         gp.getButins().add(bt);
                         // the other player is knocked back
-                        getOtherPlayer().setXposition(Positions.returnRightpos((int) getOtherPlayer().getXposition()));
+                        int nouvelpos = Positions.returnRightpos((int) getOtherPlayer().getXposition());
+                        if (nouvelpos != 0)
+                            getOtherPlayer().setXposition(nouvelpos);
+                        //Clean up
+                        Queue.remove(0);
+
+                    }
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+                }
+
+                break;
+            }
+            case TIRE_GAUCHE: {
+
+                int vise = Positions.returnLeftpos((int) xposition);
+                if (vise == getOtherPlayer().getXposition() && vise != 0) {
+                    //we found him
+
+                    found = true;
+
+                    if (!donneMessage) {
+                        System.out.println(nom + " BOOM !");
+                        //the other player drops his loot
+                        Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
+                                getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
+                        //Loot added to GameController
+                        gp.getButins().add(bt);
+                        // the other player is knocked back
+                        int nouvelpos = Positions.returnLeftpos((int) getOtherPlayer().getXposition());
+                        if (nouvelpos != 0)
+                            getOtherPlayer().setXposition(nouvelpos);
+                        //Clean up
+                        Queue.remove(0);
+
+                    }
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+                }
+
+                break;
+            }
+            case TIRE_HAUT: {
+
+                int vise = Positions.returnToppos((int) yposition);
+                if (vise == getOtherPlayer().getYposition() && vise != 0) {
+
+                    //we found him
+
+                    found = true;
+
+                    if (!donneMessage) {
+                        System.out.println(nom + " BOOM !");
+                        //the other player drops his loot
+                        Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
+                                getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
+
+                        //Loot added to GameController
+                        gp.getButins().add(bt);
+
+                        //Clean up
+                        Queue.remove(0);
+
+                    }
+                    animated = Boolean.FALSE;
+                    donneMessage = Boolean.FALSE;
+                }
+
+                break;
+            }
+            case TIRE_BAS: {
+
+                int vise = Positions.returnBottompos((int) yposition);
+                if (vise == getOtherPlayer().getYposition() && vise != 0) {
+                    //we found him
+
+                    found = true;
+
+                    if (!donneMessage) {
+                        System.out.println(nom + " BOOM !");
+                        //the other player drops his loot
+                        Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
+                                getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
+
+                        //Loot added to GameController
+                        gp.getButins().add(bt);
+
                         //Clean up
                         Queue.remove(0);
 

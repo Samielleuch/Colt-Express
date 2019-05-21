@@ -34,4 +34,8 @@ public abstract class Butin {
     public int getXposition() {
         return xposition;
     }
+
+    public int getYposition() {
+        return yposition;
+    }
 }
