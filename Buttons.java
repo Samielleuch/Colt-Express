@@ -3,20 +3,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Buttons extends JPanel {
+class Buttons extends JPanel {
 
-    JButton haut = new JButton("Haut");
-    JButton bas = new JButton("Bas");
-    JButton droite = new JButton("Droite");
-    JButton gauche = new JButton("Gauche");
-    JButton tire_haut = new JButton("Tire Haut");
-    JButton tire_bas = new JButton("Tire Bas");
-    JButton tire_droite = new JButton("Tire Droite");
-    JButton tire_gauche = new JButton("Tire Gauche");
-    JButton braque = new JButton("Braque");
-    JButton go = new JButton("Action !");
-    GamePanel gp;
-    GameController gc;
+    private JButton haut = new JButton("Haut");
+    private JButton bas = new JButton("Bas");
+    private JButton droite = new JButton("Droite");
+    private JButton gauche = new JButton("Gauche");
+    private JButton tire_haut = new JButton("Tire Haut");
+    private JButton tire_bas = new JButton("Tire Bas");
+    private JButton tire_droite = new JButton("Tire Droite");
+    private JButton tire_gauche = new JButton("Tire Gauche");
+    private JButton braque = new JButton("Braque");
+    private JButton go = new JButton("Action !");
+    private GamePanel gp;
+    private GameController gc;
 
     public Buttons(GamePanel gp) {
         // associe le GamePanel!

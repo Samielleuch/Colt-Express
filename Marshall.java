@@ -1,13 +1,14 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 import java.util.Random;
 
 public class Marshall {
 
     private BufferedImage tileSet;
     private BufferedImage character;
-    public static final float NERVOSITE_MARSHALL = 0.3f;
+    private static final float NERVOSITE_MARSHALL = 0.3f;
     private float xposition;
     private float yposition;
     private float targetXPosition=Positions.POSITION_4X.getAction();
@@ -27,7 +28,7 @@ public class Marshall {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        character = tileSet.getSubimage(
+        character = Objects.requireNonNull(tileSet).getSubimage(
                 x,
                 y,
                 33,

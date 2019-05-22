@@ -1,7 +1,7 @@
-public abstract class GameState {
+abstract class GameState {
     //needs refrence so it can change state
 
-    protected GameStateManager gsm ;
+    GameStateManager gsm;
     public abstract void init();
     public abstract void update();
     public abstract void draw(java.awt.Graphics2D g);

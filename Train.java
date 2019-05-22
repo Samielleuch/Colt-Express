@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class Train {
 
@@ -21,7 +22,7 @@ public class Train {
             e.printStackTrace();
         }
 
-        trainHead = tileSet.getSubimage(
+        trainHead = Objects.requireNonNull(tileSet).getSubimage(
                 16,
                 27,
                 259,

@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 public class Bandit {
@@ -43,7 +44,7 @@ public class Bandit {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        character = tileSet.getSubimage(
+        character = Objects.requireNonNull(tileSet).getSubimage(
                 x,
                 y,
                 33,
@@ -70,7 +71,7 @@ public class Bandit {
 
     }
 
-    public void Braquer(Butin bt) {
+    private void Braquer(Butin bt) {
 
         Loot.add(bt);
         calculeScore();
@@ -83,84 +84,16 @@ public class Bandit {
         return nom;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public BufferedImage getTileSet() {
-        return tileSet;
-    }
-
-    public void setTileSet(BufferedImage tileSet) {
-        this.tileSet = tileSet;
-    }
-
-    public float getXposition() {
+    private float getXposition() {
         return xposition;
     }
 
-    public void setXposition(float xposition) {
+    private void setXposition(float xposition) {
         this.xposition = xposition;
     }
 
-    public float getYposition() {
+    private float getYposition() {
         return yposition;
-    }
-
-    public void setYposition(float yposition) {
-        this.yposition = yposition;
-    }
-
-    public Boolean getAnimated() {
-        return animated;
-    }
-
-    public void setAnimated(Boolean animated) {
-        this.animated = animated;
-    }
-
-    public BufferedImage getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(BufferedImage character) {
-        this.character = character;
-    }
-
-    public float getDx() {
-        return dx;
-    }
-
-    public void setDx(float dx) {
-        this.dx = dx;
-    }
-
-    public float getDy() {
-        return dy;
-    }
-
-    public void setDy(float dy) {
-        this.dy = dy;
-    }
-
-    public Positions getP() {
-        return p;
-    }
-
-    public void setP(Positions p) {
-        this.p = p;
-    }
-
-    public float getTargetXPosition() {
-        return targetXPosition;
-    }
-
-    public void setTargetXPosition(float targetXPosition) {
-        this.targetXPosition = targetXPosition;
-    }
-
-    public Boolean getReadyForAction() {
-        return readyForAction;
     }
 
     public void setReadyForAction(Boolean readyForAction) {
@@ -169,10 +102,6 @@ public class Bandit {
 
     public ArrayList<Actions> getQueue() {
         return Queue;
-    }
-
-    public void setQueue(ArrayList<Actions> queue) {
-        Queue = queue;
     }
 
     private void rencontreMarshall(){
@@ -411,7 +340,7 @@ public class Bandit {
 
     }
 
-    public void doAction(Actions a) {
+    private void doAction(Actions a) {
 
         switch (a) {
             // for positions we set position
@@ -478,7 +407,7 @@ public class Bandit {
                 List<Butin> bt = gp.getButins();
 
                 for (Butin b : bt) {
-                    if ((b.getClass().getName() != "Droppedbutin")) {
+                    if ((!Objects.equals(b.getClass().getName(), "Droppedbutin"))) {
 
                         //sinon il doit etre dans l'interieur du train
                         if (xposition == b.getXposition() && (yposition == Positions.POSITION_BOTTOM_Y.getAction())) {
@@ -654,7 +583,7 @@ public class Bandit {
         );
     }
 
-    public Droppedbutin dropLoot(int val, float xpos, float ypos) {
+    private Droppedbutin dropLoot(int val, float xpos, float ypos) {
         Droppedbutin bt = new Droppedbutin("/Resources/Butins/Dropped.png", val, (int) xpos, (int) ypos);
         this.score-=val;
         return (bt);

@@ -2,7 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class BackgroundElement {
+class BackgroundElement {
     private BufferedImage image;
 
     private double x;

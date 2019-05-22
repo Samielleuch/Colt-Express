@@ -1,15 +1,15 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Butin {
+abstract class Butin {
 
     public static final int NB_BUTTIN = 4;
-    protected int valeur;
+    int valeur;
 
-    protected int xposition;
-    protected Boolean exists = Boolean.TRUE;
-    protected int yposition;
-    protected BufferedImage tileSet;
+    int xposition;
+    int yposition;
+    BufferedImage tileSet;
+    private Boolean exists = Boolean.TRUE;
 
     public void draw(Graphics2D g) {
         if (exists)

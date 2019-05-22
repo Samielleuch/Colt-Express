@@ -8,7 +8,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     // dimensions
     public static final int WIDTH = 320;
     public static final int HEIGHT = 240;
-    public static final int SCALE = 3;
+    private static final int SCALE = 3;
     private static final long serialVersionUID = 1L;
     // game thread
     private Thread thread;

@@ -54,7 +54,7 @@ public class GameController extends GameState {
 
         String[] possibilities = {"Bources", "Bijoux"};
         Random rand = new Random();
-        int x = 0;
+        int x;
         for (int i = 1; i < Butin.NB_BUTTIN; i++) {
             x = rand.nextInt(2);
             if (possibilities[x].equals("Bources"))
