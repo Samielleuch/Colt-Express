@@ -10,8 +10,8 @@ public class GameStateManager {
 
     public GameStateManager(GamePanel f) {
         gameStates = new ArrayList<GameState>();
-
-        currentState = MENUSTATE;
+//change me
+        currentState = 2;
         this.f = f;
         gameStates.add(new MenuState(this));
         gameStates.add(new GameController(this));
