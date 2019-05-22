@@ -5,17 +5,19 @@ public class GameStateManager {
     public static final int MENUSTATE = 0;
     public static final int GAMECONTROLLERSTATE = 1;
     public static final int WINNINGSTATE = 2;
+    public static final int HELPSTATE = 3;
     private int currentState;
     private GamePanel f;
 
     public GameStateManager(GamePanel f) {
         gameStates = new ArrayList<GameState>();
 //change me
-        currentState = 2;
+        currentState = 0;
         this.f = f;
         gameStates.add(new MenuState(this));
         gameStates.add(new GameController(this));
         gameStates.add(new WinningState(this));
+        gameStates.add(new HelpState(this));
     }
 
     public GamePanel getPanel() {

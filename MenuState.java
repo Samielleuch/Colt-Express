@@ -51,7 +51,7 @@ private Font font;
             gsm.setGameState(GameStateManager.GAMECONTROLLERSTATE);
         }
         if(currentChoice == 1 ){
-            //Help
+            gsm.setGameState(GameStateManager.HELPSTATE);
         }
         if(currentChoice == 2 ){
             //quit

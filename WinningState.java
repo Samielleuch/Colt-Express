@@ -73,7 +73,7 @@ public class WinningState extends GameState {
                 try {
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                            Main.class.getResourceAsStream("/Resources/Sounds/son.mp3"));
+                            Main.class.getResourceAsStream("/Resources/Sounds/son.wav"));
                     clip.open(inputStream);
                     System.out.println("ko");
                     clip.start();
