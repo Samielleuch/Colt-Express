@@ -9,6 +9,7 @@ public class GameController extends GameState {
     private Train train;
     private Bandit player1;
     private Bandit player2;
+    private Marshall Ai ;
     private CopyOnWriteArrayList<Butin> butins;
     private HashMap<Bandit, Boolean> turns;
     private String currentTurn = "";
@@ -33,6 +34,9 @@ public class GameController extends GameState {
         // 532
         player2 = new Bandit(Positions.POSITION_2X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png"
                 ,395,95,"PLAYER 2 ", this);
+
+        Ai = new Marshall(Positions.POSITION_4X.getAction(),Positions.POSITION_BOTTOM_Y.getAction(),"/Resources/Background/char.png",
+                203,95,this);
 
         // if true means c'est son tour
         turns = new HashMap<>();
@@ -65,23 +69,31 @@ public class GameController extends GameState {
         return butins;
     }
 
+    public Marshall getAi() {
+        return Ai;
+    }
+
     public void update() {
+
         background.update();
+        Ai.update();
         player1.update();
         player2.update();
 
-        if (turns.get(player1).equals(Boolean.TRUE)) {
+if(turns != null &&  turns.get(player1) != null ) {
+    if (turns.get(player1).equals(Boolean.TRUE)) {
 
-            if (player1.getQueue().isEmpty()) {
-                phase = " * PLANIFICATION * ";
-            }
-            currentTurn = " PLAYER 1's TURN !";
-        } else {
-            if (player2.getQueue().isEmpty()) {
-                phase = " * PLANIFICATION * ";
-            }
-            currentTurn = " PLAYER 2's TURN !";
+        if (player1.getQueue().isEmpty()) {
+            phase = " * PLANIFICATION * ";
         }
+        currentTurn = " PLAYER 1's TURN !";
+    } else {
+        if (player2.getQueue().isEmpty()) {
+            phase = " * PLANIFICATION * ";
+        }
+        currentTurn = " PLAYER 2's TURN !";
+    }
+}
 
     }
 
@@ -104,7 +116,11 @@ public class GameController extends GameState {
 
         }
 
+        //draw Marshall
+        Ai.draw(g);
+
         // draw bandit
+
         player1.draw(g);
         player2.draw(g);
 
@@ -117,8 +133,8 @@ public class GameController extends GameState {
 
         // draw Score  !
 
-        g.setColor(new Color(51, 43, 89));
-        g.setFont(new Font("Helvetica", Font.PLAIN, 8));
+        g.setColor(new Color(255, 251, 195));
+        g.setFont(new Font("Helvetica", Font.PLAIN, 10));
         g.drawString(score, 80, 15);
 
         // Draw The Turn string

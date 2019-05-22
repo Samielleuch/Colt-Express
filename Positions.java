@@ -3,11 +3,19 @@ import java.util.Random;
 public enum Positions {
 
     POSITION_1X(49),
+
     POSITION_2X(115),
     POSITION_3X(180),
     POSITION_4X(243),
     POSITION_BOTTOM_Y(171),
     POSITION_TOP_Y(147);
+    //intervales ou on fait pas de draw (dans l'air)
+/*    POSITION_INTERDIT1t1(90),
+    POSITION_INTERDIT1t2(106),
+    POSITION_INTERDIT1t3(153),
+    POSITION_INTERDIT1t4(171),
+    POSITION_INTERDIT1t5(219),
+    POSITION_INTERDIT1t6(223);*/
 
     // declaring private variable for getting values
     private int action;
@@ -52,7 +60,6 @@ public enum Positions {
                 break;
             }
             case 243: {
-                System.out.println("Nothing to the right !");
                 break;
             }
         }
@@ -63,7 +70,6 @@ public enum Positions {
         int result = 0;
         switch (posx) {
             case 49: {
-                System.out.println("Nothing to the Left !");
                 break;
             }
             case 115: {

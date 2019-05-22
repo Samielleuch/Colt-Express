@@ -175,7 +175,23 @@ public class Bandit {
         Queue = queue;
     }
 
+    private void rencontreMarshall(){
+        if(((int)xposition == (int)gp.getAi().getXposition() ) && ((int)yposition == (int)gp.getAi().getYposition()))
+        {
+            yposition= Positions.returnToppos((int)yposition);
+            System.out.println(nom + "est Attrapé par le Marshall !");
+            // laisse loot
+            Droppedbutin bt = this.dropLoot(score,
+                    xposition, yposition );
+            //On ajoute le Loot
+            if(bt.getValeur() > 0 )
+            gp.getButins().add(bt);
+        }
+    }
+
     public void update() {
+        // si je rencontre le Marshall
+        rencontreMarshall();
         if (readyForAction && !Queue.isEmpty()) {
 
             if (!animated) {
@@ -185,13 +201,17 @@ public class Bandit {
             Actions a;
             //we go to the right
             if ((a = Queue.get(0)) == Actions.AVANT) {
-                // sets the position
+
+
                 if (!animated) {
+                    // sets the position
                     doAction(a);
                 }
 
                 if (xposition < targetXPosition) {
                     xposition += dx;
+
+
 
                     if (!donneMessage) System.out.println(nom + " goes right!");
 
@@ -212,9 +232,12 @@ public class Bandit {
                 // sets the position
                 if (!animated)
                     doAction(a);
+
                 if (xposition > targetXPosition) {
 
                     xposition -= dx;
+
+
 
                     if (!donneMessage) System.out.println(nom + " goes Left !");
 
@@ -633,6 +656,7 @@ public class Bandit {
 
     public Droppedbutin dropLoot(int val, float xpos, float ypos) {
         Droppedbutin bt = new Droppedbutin("/Resources/Butins/Dropped.png", val, (int) xpos, (int) ypos);
+        this.score-=val;
         return (bt);
     }
 }
