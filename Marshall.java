@@ -13,7 +13,7 @@ public class Marshall {
     private float xposition;
     private float yposition;
     private float targetXPosition = Positions.POSITION_4X.getAction();
-    private float dx = 0.65f;
+    private float dx = 0.45f;
     private GameController gp;
     private Actions[] possibilities = {Actions.AVANT, Actions.ARRIERE};
     private Random rand = new Random();

@@ -16,8 +16,9 @@ public class GameController extends GameState {
     private String currentTurn = "";
     private String phase = "";
     private String score = "";
+    private boolean b = false;
     //nombre de tours maximal
-    public static final int NB_MAX_TOURS = 2;
+    public static final int NB_MAX_TOURS = 3 ;
 
     public GameController(GameStateManager gsm) {
         this.gsm = gsm;
@@ -74,6 +75,8 @@ public class GameController extends GameState {
         sfx.put("Theme", new AudioPlayer("/Resources/Sounds/Theme.mp3"));
         sfx.put("Braque", new AudioPlayer("/Resources/Sounds/Braque.mp3"));
 
+
+
     }
 
     public CopyOnWriteArrayList<Butin> getButins() {
@@ -106,13 +109,7 @@ public class GameController extends GameState {
             }
         }
 
-        if( ! sfx.get("Theme").isRunning()){
-            sfx.get("Theme").play();
-        }
-        if(gsm.getCurrentState() != GameStateManager.GAMECONTROLLERSTATE ) {
-            sfx.get("Theme").stop();
 
-        }
     }
 
     public HashMap<String, AudioPlayer> getSfx() {
@@ -164,6 +161,7 @@ public class GameController extends GameState {
         g.setFont(new Font("Helvetica", Font.PLAIN, 18));
         g.drawString(currentTurn, 80, 70);
 
+         if(!b ) {sfx.get("Theme").play();b=true ;}
 
     }
 

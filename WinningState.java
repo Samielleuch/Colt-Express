@@ -1,17 +1,13 @@
-import com.sun.tools.javac.Main;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 
 public class WinningState extends GameState {
     private BackgroundElement bg;
-    private String  menu = "Quit";
-    private String  gagnant = "";
-    AudioPlayer ap ;
+    private String menu = "Quit";
+    private String gagnant = "";
+    static AudioPlayer ap;
+    Boolean b =false;
 
 
     public void setGagnant(String gagnant) {
@@ -28,17 +24,12 @@ public class WinningState extends GameState {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        init();
     }
 
     @Override
     public void update() {
         bg.update();
-        if(gsm.getCurrentState() == GameStateManager.WINNINGSTATE) {
-            ap.play();
-        }else {
-            ap.stop();
-        }
+       init();
     }
 
     @Override
@@ -48,10 +39,10 @@ public class WinningState extends GameState {
 
         //draw menu
         g.setColor(Color.white);
-        g.setFont(new Font ("Century Gothic",Font.PLAIN , 19 ));
-        g.drawString(gagnant,15,70);
-        g.setFont(new Font ("Century Gothic",Font.PLAIN , 16 ));
-        g.drawString(menu,145,150);
+        g.setFont(new Font("Century Gothic", Font.PLAIN, 19));
+        g.drawString(gagnant, 15, 70);
+        g.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        g.drawString(menu, 145, 150);
     }
 
 
@@ -71,10 +62,14 @@ public class WinningState extends GameState {
     public void keyReleased(int k) {
     }
 
-    @Override
-    public void init() {
-        ap = new AudioPlayer("/Resources/Sounds/son.wav");
 
+    public void init() {
+        if (!b) {
+            GameController gc = (GameController) gsm.getGameStates().get(GameStateManager.GAMECONTROLLERSTATE);
+            gc.getSfx().get("Theme").close();
+            ap = new AudioPlayer("/Resources/Sounds/son.mp3");
+            ap.play();
+        }
     }
 }
 

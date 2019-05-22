@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class GameStateManager {
     private ArrayList<GameState> gameStates;
+
     public static final int MENUSTATE = 0;
     public static final int GAMECONTROLLERSTATE = 1;
     public static final int WINNINGSTATE = 2;
@@ -11,7 +12,7 @@ public class GameStateManager {
 
     public GameStateManager(GameEngine f) {
         gameStates = new ArrayList<GameState>();
-//change me
+//change meii
         currentState = 0;
         this.f = f;
         gameStates.add(new MenuState(this));
@@ -51,6 +52,7 @@ public class GameStateManager {
     }
 
     public void update() {
+
         gameStates.get(currentState).update();
 
     }
