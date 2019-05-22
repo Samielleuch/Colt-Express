@@ -26,8 +26,8 @@ public class Background {
             tree = new BackgroundElement("/Resources/Background/tree.png", 1);
             bush = new BackgroundElement("/Resources/Background/effect.png", 1);
             tree.setVector(-0.1, 0);
-            tree.setPosition(0, GamePanel.HEIGHT + 81);
-            bush.setPosition(0, GamePanel.HEIGHT + 83);
+            tree.setPosition(0, GameEngine.HEIGHT + 81);
+            bush.setPosition(0, GameEngine.HEIGHT + 83);
 
                 //importing resources
                 BufferedImage image = ImageIO.read(
@@ -54,10 +54,10 @@ public class Background {
 
     public void draw(Graphics2D g) {
 
-        sky.drawSpecific(g,GamePanel.WIDTH+25,GamePanel.HEIGHT);
-        mountain1.drawSpecific(g,GamePanel.WIDTH+25,GamePanel.HEIGHT);
-        mountain2.drawSpecific(g,GamePanel.WIDTH+25,GamePanel.HEIGHT);
-        rails.drawSpecific(g,GamePanel.WIDTH,25);
+        sky.drawSpecific(g, GameEngine.WIDTH+25, GameEngine.HEIGHT);
+        mountain1.drawSpecific(g, GameEngine.WIDTH+25, GameEngine.HEIGHT);
+        mountain2.drawSpecific(g, GameEngine.WIDTH+25, GameEngine.HEIGHT);
+        rails.drawSpecific(g, GameEngine.WIDTH,25);
         bush.draw(g);tree.draw(g);
     }
 

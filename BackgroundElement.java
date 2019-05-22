@@ -28,8 +28,8 @@ class BackgroundElement {
 
     public void setPosition(double x, double y) {
 
-        this.x = x % GamePanel.WIDTH;
-        this.y = y % GamePanel.HEIGHT;
+        this.x = x % GameEngine.WIDTH;
+        this.y = y % GameEngine.HEIGHT;
     }
 
 
@@ -41,7 +41,7 @@ class BackgroundElement {
     public void update() {
         x += dx;
         y += dy;
-        if (x < -GamePanel.WIDTH) {
+        if (x < -GameEngine.WIDTH) {
             x = 0;
         }
 
@@ -54,11 +54,11 @@ class BackgroundElement {
         g.drawImage(image, (int) x, (int) y, width, height, null);
         //keep redrawing new image if moves away
         if (x < 0) {
-            g.drawImage(image, (int) x + GamePanel.WIDTH, (int) y,
+            g.drawImage(image, (int) x + GameEngine.WIDTH, (int) y,
                     width, height, null);
         }
         if ((int) x > 0) {
-            g.drawImage(image, (int) x - GamePanel.WIDTH,
+            g.drawImage(image, (int) x - GameEngine.WIDTH,
                     (int) y, width, height, null);
         }
 
@@ -73,7 +73,7 @@ class BackgroundElement {
         if (x < 0) {
             g.drawImage(
                     image,
-                    (int) x + GamePanel.WIDTH,
+                    (int) x + GameEngine.WIDTH,
                     (int) y,
                     null
             );
@@ -81,7 +81,7 @@ class BackgroundElement {
         if (x > 0) {
             g.drawImage(
                     image,
-                    (int) x - GamePanel.WIDTH,
+                    (int) x - GameEngine.WIDTH,
                     (int) y,
                     null
             );

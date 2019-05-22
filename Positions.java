@@ -10,7 +10,7 @@ public enum Positions {
     POSITION_BOTTOM_Y(171),
     POSITION_TOP_Y(147);
     //intervales ou on fait pas de draw (dans l'air)
-/*    POSITION_INTERDIT1t1(90),
+/*  POSITION_INTERDIT1t1(90),
     POSITION_INTERDIT1t2(106),
     POSITION_INTERDIT1t3(153),
     POSITION_INTERDIT1t4(171),

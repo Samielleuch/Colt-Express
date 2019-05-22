@@ -15,11 +15,11 @@ class Buttons extends JPanel {
     private JButton tire_gauche = new JButton("Tire Gauche");
     private JButton braque = new JButton("Braque");
     private JButton go = new JButton("Action !");
-    private GamePanel gp;
+    private GameEngine gp;
     private GameController gc;
 
-    public Buttons(GamePanel gp) {
-        // associe le GamePanel!
+    public Buttons(GameEngine gp) {
+        // associe le GameEngine!
 
         this.gp = gp;
         gc = (GameController) gp.getGsm().getGameStates().get(1);

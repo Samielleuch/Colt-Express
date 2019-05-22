@@ -1,10 +1,8 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
+import java.util.*;
 
 public class Bandit {
     private String nom;
@@ -13,6 +11,7 @@ public class Bandit {
     private int score = 0;
     private int nombreDeToursCourant = 1;
     private Vector<Butin> Loot;
+    private HashMap<Actions, BufferedImage> sprite;
     private float xposition;
     private float targetXPosition;
     private float targetYPosition;
@@ -36,14 +35,51 @@ public class Bandit {
     private ArrayList<Actions> Queue = new ArrayList<>();
     private int counter = 0;
 
+    //for animation
 
-    public Bandit(float xposition, float yposition, String src,int x,int y ,  String nom, GameController gp) {
+    private Boolean versAvant = false;
+    private Boolean versDeriere = false ;
+    private Boolean versHaut = false ;
+    private Boolean versBas = true ;
+
+
+    public Bandit(float xposition, float yposition, String src, int x, int y, String nom, GameController gp) {
+        sprite = new HashMap<>();
         try {
             tileSet = ImageIO.read(
                     getClass().getResourceAsStream(src));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        character = Objects.requireNonNull(tileSet).getSubimage(
+                x,
+                y + 45,
+                33,
+                54
+        );
+
+        sprite.put(Actions.HAUT, character);
+
+        character = Objects.requireNonNull(tileSet).getSubimage(
+                x,
+                y - 95,
+                33,
+                54
+        );
+
+        sprite.put(Actions.BAS, character);
+
+        character = Objects.requireNonNull(tileSet).getSubimage(
+                x,
+                y - 45,
+                33,
+                54
+        );
+
+        sprite.put(Actions.ARRIERE, character);
+
+
         character = Objects.requireNonNull(tileSet).getSubimage(
                 x,
                 y,
@@ -51,7 +87,10 @@ public class Bandit {
                 54
         );
 
+        sprite.put(Actions.AVANT, character);
+
         this.xposition = xposition;
+        this.targetXPosition = xposition;
         this.yposition = yposition;
         this.nom = nom;
         this.gp = gp;
@@ -74,6 +113,7 @@ public class Bandit {
     private void Braquer(Butin bt) {
 
         Loot.add(bt);
+        gp.getSfx().get("Braque").play();
         calculeScore();
         gp.miseAjoursScore();
         gp.getButins().remove(bt);
@@ -104,23 +144,26 @@ public class Bandit {
         return Queue;
     }
 
-    private void rencontreMarshall(){
-        if(((int)xposition == (int)gp.getAi().getXposition() ) && ((int)yposition == (int)gp.getAi().getYposition()))
-        {
-            yposition= Positions.returnToppos((int)yposition);
+    private void rencontreMarshall() {
+        if (((int) xposition == (int) gp.getAi().getXposition()) && ((int) yposition == (int) gp.getAi().getYposition())) {
+            yposition = Positions.returnToppos((int) yposition);
             System.out.println(nom + "est Attrapé par le Marshall !");
+            //le son
+            gp.getSfx().get("Marshall").play();
+
             // laisse loot
             Droppedbutin bt = this.dropLoot(score,
-                    xposition, yposition );
+                    xposition, yposition);
             //On ajoute le Loot
-            if(bt.getValeur() > 0 )
-            gp.getButins().add(bt);
+            if (bt.getValeur() > 0)
+                gp.getButins().add(bt);
         }
     }
 
     public void update() {
         // si je rencontre le Marshall
         rencontreMarshall();
+
         if (readyForAction && !Queue.isEmpty()) {
 
             if (!animated) {
@@ -139,9 +182,8 @@ public class Bandit {
 
                 if (xposition < targetXPosition) {
                     xposition += dx;
-
-
-
+                    versAvant = true ;
+                    versDeriere=false;
                     if (!donneMessage) System.out.println(nom + " goes right!");
 
                     animated = Boolean.TRUE;
@@ -165,8 +207,8 @@ public class Bandit {
                 if (xposition > targetXPosition) {
 
                     xposition -= dx;
-
-
+                    versAvant = false;
+                    versDeriere=true;
 
                     if (!donneMessage) System.out.println(nom + " goes Left !");
 
@@ -190,6 +232,8 @@ public class Bandit {
                 if (yposition < targetYPosition) {
 
                     yposition += dy;
+                    versBas = true ;
+                    versHaut =false;
 
                     if (!donneMessage) System.out.println(nom + " goes Down !");
 
@@ -212,6 +256,11 @@ public class Bandit {
                 if (yposition > targetYPosition) {
 
                     yposition -= dy;
+                    versBas = false ;
+                    versAvant=false;
+                    versDeriere=false;
+                    versHaut =true;
+
                     if (!donneMessage) System.out.println(nom + " goes UP !");
 
                     animated = Boolean.TRUE;
@@ -299,8 +348,12 @@ public class Bandit {
                 }
                 found = Boolean.FALSE;
             }
-        } else {
 
+        } else {
+            versAvant = false;
+            versDeriere = false ;
+            versHaut = false ;
+            versBas = true ;
             // we Arrived !
             animated = Boolean.FALSE;
             readyForAction = Boolean.FALSE;
@@ -311,14 +364,12 @@ public class Bandit {
             }
             // change the Turn !
             if (actionFinished) {
-                System.out.println(nombreDeToursCourant);
-                nombreDeToursCourant ++ ;
-                 // chaque joueur joue son nbre max de tours
-                if (nombreDeToursCourant == GameController.NB_MAX_TOURS *2 )
-                {
-                 WinningState ws = (WinningState)gp.gsm.getGameStates().get(2);
-                 ws.setGagnant(gp.getFinalResult());
-                 gp.gsm.setGameState(GameStateManager.WINNINGSTATE);
+                nombreDeToursCourant++;
+                // chaque joueur joue son nbre max de tours
+                if (nombreDeToursCourant == GameController.NB_MAX_TOURS * 2) {
+                    WinningState ws = (WinningState) gp.gsm.getGameStates().get(2);
+                    ws.setGagnant(gp.getFinalResult());
+                    gp.gsm.setGameState(GameStateManager.WINNINGSTATE);
 
                 }
 
@@ -415,8 +466,9 @@ public class Bandit {
                             found = true;
                             if (!donneMessage) {
                                 System.out.println(nom + " BRAQUE !");
+
                                 Braquer(b);
-                                if( Queue.size()>0 ) {
+                                if (Queue.size() > 0) {
                                     Queue.remove(0);
                                 }
                             }
@@ -454,6 +506,8 @@ public class Bandit {
 
                     if (!donneMessage) {
                         System.out.println(nom + " BOOM !");
+                        //Le son
+                        gp.getSfx().get("tirer").play();
                         //the other player drops his loot
                         Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
                                 getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
@@ -483,6 +537,9 @@ public class Bandit {
 
                     if (!donneMessage) {
                         System.out.println(nom + " BOOM !");
+
+                        gp.getSfx().get("tirer").play();
+
                         //the other player drops his loot
                         Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
                                 getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
@@ -513,6 +570,8 @@ public class Bandit {
 
                     if (!donneMessage) {
                         System.out.println(nom + " BOOM !");
+                        gp.getSfx().get("tirer").play();
+
                         //the other player drops his loot
                         Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
                                 getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
@@ -540,6 +599,9 @@ public class Bandit {
 
                     if (!donneMessage) {
                         System.out.println(nom + " BOOM !");
+
+                        gp.getSfx().get("tirer").play();
+
                         //the other player drops his loot
                         Droppedbutin bt = getOtherPlayer().dropLoot(getOtherPlayer().getScore(),
                                 getOtherPlayer().getXposition(), getOtherPlayer().getYposition());
@@ -572,20 +634,63 @@ public class Bandit {
 
 
     public void draw(Graphics2D g) {
-
-        g.drawImage(
-                character,
-                (int) xposition,
-                (int) yposition,
-                16, 23
-                ,
-                null
-        );
+        drawHelper(g);
     }
+
+    private void drawHelper(Graphics2D g) {
+
+        if (versAvant) {
+
+            g.drawImage(
+                    sprite.get(Actions.AVANT),
+                    (int) xposition,
+                    (int) yposition,
+                    16, 23
+                    ,
+                    null
+            );
+
+        }else
+        if(versDeriere) {
+
+            g.drawImage(
+                    sprite.get(Actions.ARRIERE),
+                    (int) xposition,
+                    (int) yposition,
+                    16, 23
+                    ,
+                    null
+            );
+        }else
+            if (versBas) {
+
+                g.drawImage(
+                        sprite.get(Actions.BAS),
+                        (int) xposition,
+                        (int) yposition,
+                        16, 23
+                        ,
+                        null
+                );
+            }
+            else
+            if (versHaut) {
+                g.drawImage(
+                        sprite.get(Actions.HAUT),
+                        (int) xposition,
+                        (int) yposition,
+                        16, 23
+                        ,
+                        null
+                );
+
+            }
+        }
+
 
     private Droppedbutin dropLoot(int val, float xpos, float ypos) {
         Droppedbutin bt = new Droppedbutin("/Resources/Butins/Dropped.png", val, (int) xpos, (int) ypos);
-        this.score-=val;
+        this.score -= val;
         return (bt);
     }
 }

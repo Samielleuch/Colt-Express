@@ -7,9 +7,9 @@ public class Game {
 
         window.setLayout(new BorderLayout());
 
-        //creat GamePanel
+        //creat GameEngine
 
-        GamePanel gp = new GamePanel();
+        GameEngine gp = new GameEngine();
         window.add(gp, BorderLayout.CENTER);
 
         //create Buttons Panel

@@ -11,6 +11,7 @@ public class WinningState extends GameState {
     private BackgroundElement bg;
     private String  menu = "Quit";
     private String  gagnant = "";
+    AudioPlayer ap ;
 
 
     public void setGagnant(String gagnant) {
@@ -33,6 +34,11 @@ public class WinningState extends GameState {
     @Override
     public void update() {
         bg.update();
+        if(gsm.getCurrentState() == GameStateManager.WINNINGSTATE) {
+            ap.play();
+        }else {
+            ap.stop();
+        }
     }
 
     @Override
@@ -67,24 +73,8 @@ public class WinningState extends GameState {
 
     @Override
     public void init() {
-        new Thread(new Runnable() {
-            public void run() {
+        ap = new AudioPlayer("/Resources/Sounds/son.wav");
 
-                try {
-                    Clip clip = AudioSystem.getClip();
-                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                            Main.class.getResourceAsStream("/Resources/Sounds/son.wav"));
-                    clip.open(inputStream);
-                    System.out.println("ko");
-                    clip.start();
-                    System.out.println("ko");
-                } catch (
-                        Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-
-        }).start();
     }
 }
 

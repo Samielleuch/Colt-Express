@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 
@@ -11,29 +12,66 @@ public class Marshall {
     private static final float NERVOSITE_MARSHALL = 0.3f;
     private float xposition;
     private float yposition;
-    private float targetXPosition=Positions.POSITION_4X.getAction();
+    private float targetXPosition = Positions.POSITION_4X.getAction();
     private float dx = 0.65f;
     private GameController gp;
     private Actions[] possibilities = {Actions.AVANT, Actions.ARRIERE};
     private Random rand = new Random();
+    private HashMap<Actions, BufferedImage> sprite;
 
-    // indique que le marshall est arrivé
-    private Boolean arriveDestination = Boolean.FALSE;
+
+    //for animation
+
+    private Boolean versAvant = true;
+    private Boolean versDeriere = false;
 
 
     public Marshall(float xposition, float yposition, String src, int x, int y, GameController gp) {
+        sprite = new HashMap<>();
         try {
             tileSet = ImageIO.read(
                     getClass().getResourceAsStream(src));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        character = Objects.requireNonNull(tileSet).getSubimage(
+                x,
+                y + 45,
+                33,
+                54
+        );
+
+        sprite.put(Actions.HAUT, character);
+
+        character = Objects.requireNonNull(tileSet).getSubimage(
+                x,
+                y - 90,
+                33,
+                54
+        );
+
+        sprite.put(Actions.BAS, character);
+
+        character = Objects.requireNonNull(tileSet).getSubimage(
+                x,
+                y - 45,
+                33,
+                54
+        );
+
+        sprite.put(Actions.ARRIERE, character);
+
+
         character = Objects.requireNonNull(tileSet).getSubimage(
                 x,
                 y,
                 33,
                 54
         );
+
+        sprite.put(Actions.AVANT, character);
+
         this.xposition = xposition;
         this.yposition = yposition;
         this.gp = gp;
@@ -73,19 +111,48 @@ public class Marshall {
     public void update() {
         calculerPosition();
         if (xposition < targetXPosition) {
+            versAvant=true;
+            versDeriere=false;
             xposition += dx;
-        }
-            else if (xposition > targetXPosition) {
+        } else if (xposition > targetXPosition) {
             xposition -= dx;
+            versAvant=false;
+            versDeriere=true;
+
+        }
+
+    }
+
+    private void drawHelper(Graphics2D g) {
+
+        if (versAvant) {
+
+            g.drawImage(
+                    sprite.get(Actions.AVANT),
+                    (int) xposition,
+                    (int) yposition,
+                    16, 23
+                    ,
+                    null
+            );
+
+        } else if (versDeriere) {
+
+            g.drawImage(
+                    sprite.get(Actions.ARRIERE),
+                    (int) xposition,
+                    (int) yposition,
+                    16, 23
+                    ,
+                    null
+            );
         }
 
     }
 
 
-
-
     public void draw(Graphics2D g) {
 
-        g.drawImage(character, (int) xposition, (int) yposition, 16, 23, null);
+        drawHelper(g);
     }
 }

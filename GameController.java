@@ -9,9 +9,10 @@ public class GameController extends GameState {
     private Train train;
     private Bandit player1;
     private Bandit player2;
-    private Marshall Ai ;
+    private Marshall Ai;
     private CopyOnWriteArrayList<Butin> butins;
     private HashMap<Bandit, Boolean> turns;
+    private HashMap<String, AudioPlayer> sfx = new HashMap<>();
     private String currentTurn = "";
     private String phase = "";
     private String score = "";
@@ -28,15 +29,15 @@ public class GameController extends GameState {
         background = new Background();
         train = new Train(230, 160, "/Resources/Background/Train.png");
         player1 = new Bandit(Positions.POSITION_1X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png"
-                ,60,95,"PLAYER 1 ", this);
+                , 60, 95, "PLAYER 1 ", this);
 
         //set x to 395
         // 532
         player2 = new Bandit(Positions.POSITION_2X.getAction(), Positions.POSITION_TOP_Y.getAction(), "/Resources/Background/char.png"
-                ,395,95,"PLAYER 2 ", this);
+                , 395, 95, "PLAYER 2 ", this);
 
-        Ai = new Marshall(Positions.POSITION_4X.getAction(),Positions.POSITION_BOTTOM_Y.getAction(),"/Resources/Background/char.png",
-                203,95,this);
+        Ai = new Marshall(Positions.POSITION_4X.getAction(), Positions.POSITION_BOTTOM_Y.getAction(), "/Resources/Background/char.png",
+                203, 95, this);
 
         // if true means c'est son tour
         turns = new HashMap<>();
@@ -52,17 +53,27 @@ public class GameController extends GameState {
         // 1 Magot dans la locomotive ;
         butins.add(new Magot("/Resources/Butins/Magot.png"));
 
+
         String[] possibilities = {"Bources", "Bijoux"};
         Random rand = new Random();
         int x;
         for (int i = 1; i < Butin.NB_BUTTIN; i++) {
             x = rand.nextInt(2);
-            if (possibilities[x].equals("Bources"))
+            if (possibilities[x].equals("Bources")) {
                 butins.add(new Bourses("/Resources/Butins/Bource.png"));
-            if (possibilities[x].equals("Bijoux"))
+            }
+            if (possibilities[x].equals("Bijoux")) {
                 butins.add(new Bijoux("/Resources/Butins/Bijou.png"));
+            }
         }
         miseAjoursScore();
+
+        //pour les sons
+        sfx.put("tirer", new AudioPlayer("/Resources/Sounds/GunShot.mp3"));
+        sfx.put("Marshall", new AudioPlayer("/Resources/Sounds/MarshallHit.mp3"));
+        sfx.put("Theme", new AudioPlayer("/Resources/Sounds/Theme.mp3"));
+        sfx.put("Braque", new AudioPlayer("/Resources/Sounds/Braque.mp3"));
+
     }
 
     public CopyOnWriteArrayList<Butin> getButins() {
@@ -80,27 +91,38 @@ public class GameController extends GameState {
         player1.update();
         player2.update();
 
-if(turns != null &&  turns.get(player1) != null ) {
-    if (turns.get(player1).equals(Boolean.TRUE)) {
+        if (turns != null && turns.get(player1) != null) {
+            if (turns.get(player1).equals(Boolean.TRUE)) {
 
-        if (player1.getQueue().isEmpty()) {
-            phase = " * PLANIFICATION * ";
+                if (player1.getQueue().isEmpty()) {
+                    phase = " * PLANIFICATION * ";
+                }
+                currentTurn = " PLAYER 1's TURN !";
+            } else {
+                if (player2.getQueue().isEmpty()) {
+                    phase = " * PLANIFICATION * ";
+                }
+                currentTurn = " PLAYER 2's TURN !";
+            }
         }
-        currentTurn = " PLAYER 1's TURN !";
-    } else {
-        if (player2.getQueue().isEmpty()) {
-            phase = " * PLANIFICATION * ";
+
+        if( ! sfx.get("Theme").isRunning()){
+            sfx.get("Theme").play();
         }
-        currentTurn = " PLAYER 2's TURN !";
+        if(gsm.getCurrentState() != GameStateManager.GAMECONTROLLERSTATE ) {
+            sfx.get("Theme").stop();
+
+        }
     }
-}
 
+    public HashMap<String, AudioPlayer> getSfx() {
+        return sfx;
     }
 
     public void draw(Graphics2D g) {
         // clear screen
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+        g.fillRect(0, 0, GameEngine.WIDTH, GameEngine.HEIGHT);
 
         // draw background
 
@@ -168,14 +190,15 @@ if(turns != null &&  turns.get(player1) != null ) {
     }
 
 
-    public String getFinalResult(){
-        if(player1.getScore() > player2.getScore()) {
-         return("LE GAGNAT EST "+ player1.getNom());
-        }else if(player1.getScore() < player2.getScore()) {
-         return("LE GAGNAT EST "+ player2.getNom());
-        }else return ("LE RESULTAT EST : EGALITE :D  ");
+    public String getFinalResult() {
+        if (player1.getScore() > player2.getScore()) {
+            return ("LE GAGNAT EST " + player1.getNom());
+        } else if (player1.getScore() < player2.getScore()) {
+            return ("LE GAGNAT EST " + player2.getNom());
+        } else return ("LE RESULTAT EST : EGALITE :D  ");
 
     }
+
     public Background getBackground() {
         return background;
     }

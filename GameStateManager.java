@@ -7,9 +7,9 @@ public class GameStateManager {
     public static final int WINNINGSTATE = 2;
     public static final int HELPSTATE = 3;
     private int currentState;
-    private GamePanel f;
+    private GameEngine f;
 
-    public GameStateManager(GamePanel f) {
+    public GameStateManager(GameEngine f) {
         gameStates = new ArrayList<GameState>();
 //change me
         currentState = 0;
@@ -20,7 +20,7 @@ public class GameStateManager {
         gameStates.add(new HelpState(this));
     }
 
-    public GamePanel getPanel() {
+    public GameEngine getPanel() {
         return f;
     }
 

@@ -38,7 +38,7 @@ public class HelpState extends GameState {
     public void draw(Graphics2D g) {
         // clear screen
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+        g.fillRect(0, 0, GameEngine.WIDTH, GameEngine.HEIGHT);
         //draw Rules
         g.setColor(Color.white);
         g.setFont(new Font("Arial", Font.PLAIN, 9));
