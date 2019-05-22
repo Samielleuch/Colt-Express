@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class MenuState extends GameState {
-    private Background bg;
+    private BackgroundElement bg;
     //to keep track of the selected option
     private int currentChoice = 0 ;
     private String[] options= {
@@ -31,7 +31,7 @@ private Font font;
         //draw title
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("Asma game ",80,70);
+        g.drawString("Colt Express. ",80,70);
         // draw menu options
         g.setFont(font);
         for (int i = 0; i < options.length ; i++) {
@@ -48,9 +48,10 @@ private Font font;
     private void select() {
         if(currentChoice == 0 ){
             //start
+            gsm.setGameState(GameStateManager.GAMECONTROLLERSTATE);
         }
         if(currentChoice == 1 ){
-            //Help
+            gsm.setGameState(GameStateManager.HELPSTATE);
         }
         if(currentChoice == 2 ){
             //quit
@@ -92,7 +93,7 @@ private Font font;
         this.gsm = gsm;
     try {
 
-        bg = new Background("/Resources/Background/menubg.gif",1);
+        bg = new BackgroundElement("/Resources/Background/menubg.gif", 1);
         //moves to the left
         bg.setVector(-0.1,0);
         titleColor = new Color(128,0,0);

@@ -1,10 +1,22 @@
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
+
 public class Game {
     public static void main(String[] args) {
-        JFrame window = new JFrame("Simple Graphics Program");
-        window.setContentPane(new GamePanel());
+        JFrame window = new JFrame("Game!");
+
+        window.setLayout(new BorderLayout());
+
+        //creat GameEngine
+
+        GameEngine gp = new GameEngine();
+        window.add(gp, BorderLayout.CENTER);
+
+        //create Buttons Panel
+        Buttons bp = new Buttons(gp);
+        window.add(bp, BorderLayout.SOUTH);
+
+
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.pack();
